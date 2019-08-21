@@ -1,4 +1,6 @@
 /coverage
 /node_modules
+/.expo
+yarn.lock
 yarn-error.log
 *.log
