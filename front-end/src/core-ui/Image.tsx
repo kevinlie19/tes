@@ -1,5 +1,10 @@
 import React from 'react';
-import { StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import {
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  ActivityIndicator,
+} from 'react-native';
 
 import { Image as Picture } from 'react-native-elements';
 
@@ -18,6 +23,7 @@ export default function Image(props: Props) {
       source={require('../../assets/images/placeholder.jpg')}
       style={styles[type || 'square']}
       containerStyle={newImageStyle}
+      PlaceholderContent={<ActivityIndicator />}
       resizeMode={resizeMode}
       {...other}
     />
@@ -26,6 +32,7 @@ export default function Image(props: Props) {
       source={{ uri: src }}
       style={styles[type || 'square']}
       containerStyle={newImageStyle}
+      PlaceholderContent={<ActivityIndicator />}
       resizeMode={resizeMode}
       {...other}
     />
