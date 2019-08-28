@@ -1,78 +1,108 @@
-import React, { ReactNode } from 'react';
-
+import React from 'react';
 import {
   TextProps,
   StyleSheet,
+  StyleProp,
+  TextStyle,
   Text as TextComponent,
+  TouchableOpacity,
 } from 'react-native';
 
-import { CUSTOM_RED, CUSTOM_BROWN, CUSTOM_YELLOW, CUSTOM_GREEN, BLACK, WHITE, GREY, DARK_GREY, LIGHT_GREY } from '../constants/color';
-import { XXSMALL, XSMALL, SMALL, MEDIUM, MLARGE, LARGE, XLARGE } from '../constants/fontSize';
+import {
+  CUSTOM_RED,
+  CUSTOM_BROWN,
+  CUSTOM_YELLOW,
+  CUSTOM_GREEN,
+  BLACK,
+  WHITE,
+  GREY,
+  DARK_GREY,
+  LIGHT_GREY,
+} from '../constants/color';
+import {
+  XXSMALL,
+  XSMALL,
+  SMALL,
+  MEDIUM,
+  MLARGE,
+  LARGE,
+  XLARGE,
+} from '../constants/fontSize';
 
 type Props = TextProps & {
-  children?: ReactNode;
-  definedStyle?:
-  | 'headTitle'
-  | 'heading'
-  | 'title'
-  | 'status';
-  weight?: 'regular' | 'bold' | 'light';
-  color?: string;
+  newTextStyle?: StyleProp<TextStyle>;
+  type:
+    | 'headerTitle'
+    | 'xsmall'
+    | 'small'
+    | 'medium'
+    | 'mlarge'
+    | 'large'
+    | 'xlarge';
   text: string;
   onPress?: () => void;
 };
 
-
-const FONT_WEIGHT: any = {
-  regular: 'normal',
-  bold: 'bold',
-};
-
-const FONT_COLOR = '#323232';
-
 export default function Text(props: Props) {
-  let {
-    children,
-    definedStyle,
-    style,
-    onPress,
-    color,
-    weight,
-    text,
-    ...other
-  } = props;
+  let { newTextStyle, type, text, onPress, ...other } = props;
 
-  let fontWeight = FONT_WEIGHT[weight || 'regular'];
-  let textColor = color || FONT_COLOR;
-
-  let textStyle = { fontWeight, color: textColor };
-
-  return (
-    <TextComponent>{text}</TextComponent>
-  )
-
+  return onPress ? (
+    <TouchableOpacity>
+      <TextComponent style={[type && styles[type], newTextStyle]}>
+        {text}
+      </TextComponent>
+    </TouchableOpacity>
+  ) : (
+    <TextComponent style={[type && styles[type], newTextStyle]}>
+      {text}
+    </TextComponent>
+  );
 }
 
 const styles = StyleSheet.create({
-  headTitle: {
+  defaultStyle: {
+    fontSize: SMALL,
+    color: WHITE,
+    fontWeight: '400' || 'normal',
+  },
+  headerTitle: {
     fontSize: LARGE,
     color: WHITE,
     fontWeight: 'bold',
   },
-  heading: {
-    fontSize: LARGE,
-    color: BLACK,
-    fontWeight: 'bold',
+  xxsmall: {
+    fontSize: XXSMALL,
+    color: GREY,
+    fontWeight: '400' || 'normal',
   },
-  title: {
+  xsmall: {
+    fontSize: XSMALL,
+    color: DARK_GREY,
+    fontWeight: '400' || 'normal',
+  },
+  small: {
+    fontSize: SMALL,
+    color: BLACK,
+    fontWeight: '600',
+  },
+  medium: {
     fontSize: MEDIUM,
     color: BLACK,
-    fontWeight: 'bold',
+    fontWeight: '400' || 'normal',
   },
-  status: {
-    fontSize: XSMALL,
-    color: GREY || LIGHT_GREY || CUSTOM_RED || CUSTOM_GREEN,
-    fontWeight: 'bold',
+  mlarge: {
+    fontSize: MLARGE,
+    color: BLACK,
+    fontWeight: '600',
   },
-
+  large: {
+    fontSize: LARGE,
+    color: BLACK,
+    fontWeight: '600',
+  },
+  xlarge: {
+    fontSize: XLARGE,
+    color: BLACK,
+    fontWeight: '600',
+  },
 });
