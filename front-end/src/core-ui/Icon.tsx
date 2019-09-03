@@ -34,6 +34,7 @@ import attachment from '../../assets/images/attachment.png';
 
 // Main Features
 import logo from '../../assets/images/logo.png';
+import logoBig from '../../assets/images/logoBig.png';
 import google from '../../assets/images/google.png';
 import course from '../../assets/images/course.png';
 import event from '../../assets/images/event.png';
@@ -109,7 +110,7 @@ const ICONS = {
   },
   logo: {
     true: logo,
-    false: logo,
+    false: logoBig,
   },
   google: {
     true: google,
