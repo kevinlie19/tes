@@ -1,39 +1,37 @@
 import React from 'react';
-import {
-    TextInput as TextInputComponent,
-    Text,
-    StyleProp,
-    View,
-    ViewStyle,
-    TextStyle
-} from 'react-native';
+import { StyleProp, ViewStyle } from 'react-native';
 
-import {
-    Input
-} from 'react-native-elements';
-// import { string } from 'prop-types';
+import { Input } from 'react-native-elements';
 
 type Props = {
-    Text?: string;
-    label: string;
-    labelStyle?: object;
-    labelProps?: Text;
-    value?: string;
-    onChangeText?: () => void;
-    onPress?: () => void;
+  newContainerStyle?: StyleProp<ViewStyle>;
+  placeholder: string;
+  value?: string;
+  onChangeText?: (text: string) => void;
 };
 
-export default function TextInput(props: Props){
-    let{
-        Text,
-        label,
-        labelStyle,
-        labelProps,
-        value,
-        onPress,
-    } = props;
+export default function TextInput(props: Props) {
+  let {
+    newContainerStyle,
+    placeholder,
+    value,
+    onChangeText,
+    ...otherProps
+  } = props;
 
-    return (
-        <Input label={label} placeholder='Hello'/>
-    );
+  return (
+    <Input
+      containerStyle={newContainerStyle}
+      placeholder={placeholder}
+      value={value}
+      onChangeText={onChangeText}
+      autoFocus={true}
+      autoCapitalize={'none'}
+      autoCorrect={false}
+      secureTextEntry={
+        placeholder === 'Password' || placeholder === 'Repeat Password'
+      }
+      {...otherProps}
+    />
+  );
 }
