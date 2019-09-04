@@ -1,7 +1,7 @@
 import { createStackNavigator } from 'react-navigation-stack';
 
-import HomeScene from '../../scenes/HomeScene';
 import WelcomeScene from '../../scenes/WelcomeScene';
+import HomeScene from '../../scenes/HomeScene';
 
 const AppStack = createStackNavigator({
   Welcome: {

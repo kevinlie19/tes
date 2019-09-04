@@ -3,7 +3,7 @@ import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 
 import { Icon } from '../core-ui';
-import { LIGHT_BLACK, CUSTOM_YELLOW } from '../constants/color';
+import { CUSTOM_YELLOW, CUSTOM_BLACK } from '../constants/color';
 
 type Props = NavigationScreenProps;
 
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   imageBackground: {
     width: '100%',
     height: '100%',
-    backgroundColor: LIGHT_BLACK,
+    backgroundColor: CUSTOM_BLACK,
   },
   imageContainer: {
     flex: 1,

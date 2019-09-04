@@ -8,17 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {
-  CUSTOM_RED,
-  CUSTOM_BROWN,
-  CUSTOM_YELLOW,
-  CUSTOM_GREEN,
-  BLACK,
-  WHITE,
-  GREY,
-  DARK_GREY,
-  LIGHT_GREY,
-} from '../constants/color';
+import { BLACK, WHITE, GREY, DARK_GREY } from '../constants/color';
 import {
   XXSMALL,
   XSMALL,
@@ -47,13 +37,13 @@ export default function Text(props: Props) {
   let { newTextStyle, type, text, onPress, ...other } = props;
 
   return onPress ? (
-    <TouchableOpacity>
-      <TextComponent style={[type && styles[type], newTextStyle]}>
+    <TouchableOpacity onPress={onPress}>
+      <TextComponent style={[styles[type], newTextStyle]} {...other}>
         {text}
       </TextComponent>
     </TouchableOpacity>
   ) : (
-    <TextComponent style={[type && styles[type], newTextStyle]}>
+    <TextComponent style={[styles[type], newTextStyle]} {...other}>
       {text}
     </TextComponent>
   );

@@ -9,7 +9,7 @@ export default class SignUpScene extends Component<Props, State> {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.tsx to start working on your app!</Text>
+        <Text>Open up SignUpScene.tsx to start working on your app!</Text>
       </View>
     );
   }

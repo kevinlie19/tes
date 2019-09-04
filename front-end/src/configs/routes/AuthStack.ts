@@ -1,4 +1,5 @@
 import { createStackNavigator } from 'react-navigation-stack';
+
 import SignInScene from '../../scenes/SignInScene';
 import SignUpScene from '../../scenes/SignUpScene';
 
