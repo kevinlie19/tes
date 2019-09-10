@@ -140,22 +140,22 @@ export default class HomeScene extends Component<Props, State> {
                   contentContainerStyle={{ padding: 5, margin: 5 }}
                 >
                   <EventList
-                    category="Seminar"
+                    category="WORKSHOP"
+                    title="Talkshow Menjadi Seorang Entrepreneur"
+                    date="01 Desember 2019"
+                    price="Rp 400.000"
+                    onPress={() => {}}
+                  />
+                  <EventList
+                    category="SEMINAR"
                     title="Motivasi Kaya"
                     date="01 Desember 2019"
                     price="Rp 400.000"
                     onPress={() => {}}
                   />
                   <EventList
-                    category="Seminar"
-                    title="Motivasi Kaya"
-                    date="01 Desember 2019"
-                    price="Rp 400.000"
-                    onPress={() => {}}
-                  />
-                  <EventList
-                    category="Seminar"
-                    title="Motivasi Kaya"
+                    category="WORKSHOP"
+                    title="Mental Baja Seorang Entrepreneur"
                     date="01 Desember 2019"
                     price="Rp 400.000"
                     onPress={() => {}}
@@ -163,8 +163,8 @@ export default class HomeScene extends Component<Props, State> {
                 </ScrollView>
               </View>
 
-              <View style={styles.trendingContainer}>
-                <Text text="Trending News" type="large" />
+              <View style={styles.latestNewsContainer}>
+                <Text text="Latest News" type="large" />
                 <View></View>
               </View>
             </View>
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     marginVertical: 24,
     marginHorizontal: 16,
   },
-  trendingContainer: {
+  latestNewsContainer: {
     marginBottom: 24,
     marginHorizontal: 16,
   },
