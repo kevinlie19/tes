@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { NavigationScreenProps, ScrollView } from 'react-navigation';
+import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
+import { NavigationScreenProps } from 'react-navigation';
 
 import {
   WHITE,
@@ -14,7 +14,7 @@ import {
 } from '../constants/color';
 import { Icon, Text, Image } from '../core-ui';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
-import EventList from '../components/EventList';
+import { EventList } from '../components';
 
 type Props = NavigationScreenProps & {};
 
