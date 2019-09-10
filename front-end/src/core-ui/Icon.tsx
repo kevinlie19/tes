@@ -191,7 +191,7 @@ export default function Icon(props: Props) {
     return null;
   }
 
-  return (
+  return onPress ? (
     <TouchableOpacity onPress={onPress}>
       <Image
         resizeMode="contain"
@@ -201,6 +201,14 @@ export default function Icon(props: Props) {
         style={[styles.defaultIcon, customStyle]}
       />
     </TouchableOpacity>
+  ) : (
+    <Image
+      resizeMode="contain"
+      resizeMethod="resize"
+      fadeDuration={0}
+      source={source}
+      style={[styles.defaultIcon, customStyle]}
+    />
   );
 }
 

@@ -23,6 +23,7 @@ type Props = TextProps & {
   newTextStyle?: StyleProp<TextStyle>;
   type:
     | 'headerTitle'
+    | 'xxsmall'
     | 'xsmall'
     | 'small'
     | 'medium'
