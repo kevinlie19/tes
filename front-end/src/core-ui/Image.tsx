@@ -11,7 +11,7 @@ import { Image as Picture } from 'react-native-elements';
 type Props = {
   newImageStyle?: StyleProp<ViewStyle>;
   src?: string;
-  type?: 'event' | 'banner' | 'square' | 'xLarge';
+  type: 'event' | 'banner' | 'square' | 'xLarge';
   resizeMode?: 'center' | 'contain' | 'stretch' | 'cover' | 'repeat';
 };
 

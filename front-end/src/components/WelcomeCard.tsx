@@ -38,13 +38,13 @@ export default class WelcomeCard extends Component<Props, State> {
         <Button buttonType="google" newStyleText={styles.textButton} />
         <View style={styles.loginContainer}>
           <Text
-            type="large"
+            type="medium"
             text="Already have an account?"
             newTextStyle={styles.greyText}
           />
           <Text
             onPress={onPressTextLogin}
-            type="large"
+            type="medium"
             text=" Login here"
             newTextStyle={styles.greyText}
           />
@@ -56,9 +56,7 @@ export default class WelcomeCard extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    marginHorizontal: 16,
-    marginBottom: 36,
-    // margin: 16,
+    margin: 16,
     borderRadius: 8,
     backgroundColor: WHITE,
     height: 334,
@@ -75,7 +73,10 @@ const styles = StyleSheet.create({
   },
   greyText: {
     color: GREY,
-    fontWeight: 'normal',
+  },
+  loginHere: {
+    color: GREY,
+    fontWeight: 'bold',
   },
   dividerContainer: {
     flexDirection: 'row',
