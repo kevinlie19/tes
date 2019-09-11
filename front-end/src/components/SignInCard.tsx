@@ -1,25 +1,44 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 
 import { Text, Button, TextInput } from '../core-ui';
-import { WHITE } from '../constants/color';
+import { WHITE, GREY } from '../constants/color';
 
 type Props = {
-  onChangeText?: () => void;
+  onChangeTextEmail?: () => void;
+  onChangeTextPassword?: () => void;
+  onPress?: () => void;
 };
 
 export default function SignInCard(props: Props) {
-  let { onChangeText } = props;
+  let { onChangeTextEmail, onChangeTextPassword, onPress } = props;
 
   return (
     <View style={styles.cardContainer}>
       <Text type="large" text="Sign In" newTextStyle={styles.title} />
-      <TextInput placeholder="Email" onChangeText={onChangeText} />
-      <TextInput placeholder="Password" onChangeText={onChangeText} />
+      <TextInput
+        placeholder="Email"
+        onChangeText={onChangeTextEmail}
+        newContainerStyle={styles.textinputContainer}
+      />
+      <TextInput
+        placeholder="Password"
+        onChangeText={onChangeTextPassword}
+        newContainerStyle={styles.textinputContainer}
+      />
+      <TouchableOpacity style={styles.forgetPasswordContainer}>
+        <Text
+          text="Forget password"
+          type="xsmall"
+          newTextStyle={styles.forgetPasswordText}
+        />
+      </TouchableOpacity>
       <Button
         buttonType="secondary"
         text="SIGN IN"
         newStyleText={styles.textButton}
+        newStyleButton={styles.buttonContainer}
+        onPress={onPress}
       />
     </View>
   );
@@ -36,10 +55,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    paddingTop: 40,
+    paddingVertical: 40,
     fontWeight: 'normal',
+  },
+  textinputContainer: {
+    paddingHorizontal: 24,
+    marginBottom: 30,
+  },
+  forgetPasswordContainer: {
+    alignSelf: 'flex-end',
+    paddingRight: 24,
+    marginTop: -10,
+  },
+  forgetPasswordText: {
+    color: GREY,
   },
   textButton: {
     fontWeight: 'normal',
+  },
+  buttonContainer: {
+    marginTop: 40,
+    marginBottom: 58,
   },
 });
