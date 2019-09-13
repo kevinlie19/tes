@@ -5,8 +5,8 @@ import { Text, Button, TextInput } from '../core-ui';
 import { WHITE, GREY } from '../constants/color';
 
 type Props = {
-  onChangeTextEmail?: () => void;
-  onChangeTextPassword?: () => void;
+  onChangeTextEmail?: (text: string) => void;
+  onChangeTextPassword?: (text: string) => void;
   onPress?: () => void;
 };
 

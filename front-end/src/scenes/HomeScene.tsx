@@ -64,6 +64,7 @@ export default class HomeScene extends Component<Props, State> {
                     />
                   </View>
                 </View>
+                <View style={styles.dividerInfo} />
                 <View style={styles.memberContainer}>
                   <Icon
                     name="membership"
@@ -128,9 +129,9 @@ export default class HomeScene extends Component<Props, State> {
                 </TouchableOpacity>
               </View>
 
-              <View style={styles.bannerContainer}>
+              <TouchableOpacity style={styles.bannerContainer}>
                 <Image type="banner" />
-              </View>
+              </TouchableOpacity>
 
               <View style={styles.eventContainer}>
                 <Text text="Event Terdekat" type="large" />
@@ -272,7 +273,7 @@ const styles = StyleSheet.create({
   levelIcon: {
     width: 25,
     height: 36,
-    marginRight: 12,
+    marginRight: 10,
   },
   levelTextContainer: {
     flexDirection: 'column',
@@ -283,6 +284,10 @@ const styles = StyleSheet.create({
   learningText: {
     color: CUSTOM_BROWN,
     paddingTop: 4,
+  },
+  dividerInfo: {
+    borderLeftWidth: 1,
+    borderLeftColor: CUSTOM_WHITE,
   },
   memberContainer: {
     flexDirection: 'row',

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 
 import { Text, Icon, Avatar } from '../core-ui';
 import {
@@ -13,13 +15,26 @@ import {
   CUSTOM_BROWN,
 } from '../constants/color';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
+import { token } from '../helpers';
+import { RootState } from '../types/State';
+import { MyAccountState } from '../types/MyAccountSceneType';
 
-type Props = NavigationScreenProps & {};
+type Props = NavigationScreenProps & {
+  accountData: MyAccountState;
+  fetchMyAccount: () => void;
+};
 
-type State = {};
+type MyAccountSceneState = {};
 
-export default class SignInScene extends Component<Props, State> {
+export class MyAccountScene extends Component<Props, MyAccountSceneState> {
+  async componentWillMount() {
+    let { fetchMyAccount } = this.props;
+    await fetchMyAccount();
+  }
+
   render() {
+    let { accountData } = this.props;
+
     return (
       <View style={styles.container}>
         <View style={styles.navbar}>
@@ -87,6 +102,7 @@ export default class SignInScene extends Component<Props, State> {
               text="Log Out"
               type="medium"
               newTextStyle={styles.logoutText}
+              onPress={this._onPressLogOut}
             />
           </View>
         </View>
@@ -152,7 +168,33 @@ export default class SignInScene extends Component<Props, State> {
       </View>
     );
   }
+
+  _onPressLogOut = async () => {
+    await token.removeToken();
+    this.props.navigation.navigate('Welcome');
+  };
 }
+
+let mapStateToProps = (state: RootState) => {
+  let { accountState } = state;
+
+  return {
+    accountData: accountState,
+  };
+};
+
+let mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    fetchMyAccount: () => {
+      dispatch({ type: 'ACCOUNT_SUCCEED' });
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MyAccountScene);
 
 const styles = StyleSheet.create({
   container: {

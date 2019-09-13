@@ -15,7 +15,7 @@ type Props = {
 export default function Avatar(props: Props) {
   let { src, newAvatarStyle } = props;
 
-  return src ? (
+  return src && src !== null ? (
     <Picture
       source={{ uri: src }}
       style={styles.avatarDefault}
