@@ -13,7 +13,6 @@ export default function signinReducer(
       return { ...signinState, isProcessing: true };
     }
     case 'SIGNIN_SUCCEED': {
-      console.log('masuk sign in reducer');
       return {
         ...signinState,
         isProcessing: false,

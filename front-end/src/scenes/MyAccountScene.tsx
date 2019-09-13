@@ -17,23 +17,31 @@ import {
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
 import { token } from '../helpers';
 import { RootState } from '../types/State';
-import { MyAccountState } from '../types/MyAccountSceneType';
+import { UserObject } from '../types/Commons';
 
 type Props = NavigationScreenProps & {
-  accountData: MyAccountState;
-  fetchMyAccount: () => void;
+  userData: UserObject;
+  fetchMyAccount: (authToken: string) => void;
 };
 
 type MyAccountSceneState = {};
 
 export class MyAccountScene extends Component<Props, MyAccountSceneState> {
-  async componentWillMount() {
-    let { fetchMyAccount } = this.props;
-    await fetchMyAccount();
+  async componentDidMount() {
+    this._asyncStorage();
   }
 
+  _asyncStorage = async () => {
+    let { fetchMyAccount } = this.props;
+    let userToken = await token.getToken();
+
+    if (userToken) {
+      await fetchMyAccount(userToken);
+    }
+  };
+
   render() {
-    let { accountData } = this.props;
+    let { userData } = this.props;
 
     return (
       <View style={styles.container}>
@@ -55,7 +63,7 @@ export class MyAccountScene extends Component<Props, MyAccountSceneState> {
           <View style={styles.infoContainer}>
             <Avatar />
             <View style={styles.textContainer}>
-              <Text text="Lia Eden" type="large" />
+              <Text text={userData.first_name} type="large" />
               <View style={styles.smallTextContainer}>
                 <Text
                   text="Entrepreneur"
@@ -179,14 +187,14 @@ let mapStateToProps = (state: RootState) => {
   let { accountState } = state;
 
   return {
-    accountData: accountState,
+    userData: accountState,
   };
 };
 
 let mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    fetchMyAccount: () => {
-      dispatch({ type: 'ACCOUNT_SUCCEED' });
+    fetchMyAccount: (authToken: string) => {
+      dispatch({ type: 'ACCOUNT_REQUESTED', authToken });
     },
   };
 };
