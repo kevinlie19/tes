@@ -9,11 +9,16 @@ type State = {};
 type Props = {
   onPressTextLogin?: () => void;
   onPressButtonSignUp?: () => void;
+  onPressButtonGoogle?: () => void;
 };
 
 export default class WelcomeCard extends Component<Props, State> {
   render() {
-    let { onPressTextLogin, onPressButtonSignUp } = this.props;
+    let {
+      onPressTextLogin,
+      onPressButtonSignUp,
+      onPressButtonGoogle,
+    } = this.props;
 
     return (
       <View style={styles.cardContainer}>
@@ -35,7 +40,11 @@ export default class WelcomeCard extends Component<Props, State> {
           <View style={styles.divider} />
         </View>
 
-        <Button buttonType="google" newStyleText={styles.textButton} />
+        <Button
+          buttonType="google"
+          newStyleText={styles.textButton}
+          onPress={onPressButtonGoogle}
+        />
         <View style={styles.loginContainer}>
           <Text
             type="medium"
