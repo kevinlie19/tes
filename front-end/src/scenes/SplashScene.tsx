@@ -4,15 +4,21 @@ import { NavigationScreenProps } from 'react-navigation';
 
 import { Icon } from '../core-ui';
 import { CUSTOM_YELLOW, CUSTOM_BLACK } from '../constants/color';
+import { token } from '../helpers/';
 
 type Props = NavigationScreenProps;
 
 export default class SplashScene extends Component<Props> {
   componentDidMount() {
-    setTimeout(() => {
-      this.props.navigation.navigate('Welcome');
-    }, 2000);
+    this._asyncStorage();
   }
+
+  _asyncStorage = async () => {
+    let userToken = await token.getToken();
+    setTimeout(() => {
+      this.props.navigation.navigate(userToken ? 'Home' : 'Welcome');
+    }, 2000);
+  };
 
   render() {
     return (

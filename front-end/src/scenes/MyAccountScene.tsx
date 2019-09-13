@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 
 import { Text, Icon, Avatar } from '../core-ui';
 import {
@@ -13,13 +15,34 @@ import {
   CUSTOM_BROWN,
 } from '../constants/color';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
+import { token } from '../helpers';
+import { RootState } from '../types/State';
+import { UserObject } from '../types/Commons';
 
-type Props = NavigationScreenProps & {};
+type Props = NavigationScreenProps & {
+  userData: UserObject;
+  fetchMyAccount: (authToken: string) => void;
+};
 
-type State = {};
+type MyAccountSceneState = {};
 
-export default class SignInScene extends Component<Props, State> {
+export class MyAccountScene extends Component<Props, MyAccountSceneState> {
+  async componentDidMount() {
+    this._asyncStorage();
+  }
+
+  _asyncStorage = async () => {
+    let { fetchMyAccount } = this.props;
+    let userToken = await token.getToken();
+
+    if (userToken) {
+      await fetchMyAccount(userToken);
+    }
+  };
+
   render() {
+    let { userData } = this.props;
+
     return (
       <View style={styles.container}>
         <View style={styles.navbar}>
@@ -40,7 +63,7 @@ export default class SignInScene extends Component<Props, State> {
           <View style={styles.infoContainer}>
             <Avatar />
             <View style={styles.textContainer}>
-              <Text text="Lia Eden" type="large" />
+              <Text text={userData.first_name} type="large" />
               <View style={styles.smallTextContainer}>
                 <Text
                   text="Entrepreneur"
@@ -87,6 +110,7 @@ export default class SignInScene extends Component<Props, State> {
               text="Log Out"
               type="medium"
               newTextStyle={styles.logoutText}
+              onPress={this._onPressLogOut}
             />
           </View>
         </View>
@@ -152,7 +176,33 @@ export default class SignInScene extends Component<Props, State> {
       </View>
     );
   }
+
+  _onPressLogOut = async () => {
+    await token.removeToken();
+    this.props.navigation.navigate('Welcome');
+  };
 }
+
+let mapStateToProps = (state: RootState) => {
+  let { accountState } = state;
+
+  return {
+    userData: accountState,
+  };
+};
+
+let mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    fetchMyAccount: (authToken: string) => {
+      dispatch({ type: 'ACCOUNT_REQUESTED', authToken });
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MyAccountScene);
 
 const styles = StyleSheet.create({
   container: {
