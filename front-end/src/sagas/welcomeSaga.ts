@@ -19,7 +19,7 @@ function* signinGoogleRequest(action: WelcomeAction) {
       avatar,
       _navigator,
     } = action;
-    let url = `${API_HOST}/api/auth/sign-in`;
+    let url = `${API_HOST}/api/auth/sign-up`;
     let data = {
       id,
       email,
@@ -36,9 +36,33 @@ function* signinGoogleRequest(action: WelcomeAction) {
       },
     });
     let result = yield response.json();
-    console.log('login Google:', result);
 
     if (result.success) {
+      yield call(token.saveToken, JSON.stringify(result.token));
+      let NavigationHelper = createNavigationHelper(_navigator);
+      yield put({ type: 'SIGNINGOOGLE_SUCCEED' });
+      NavigationHelper.navigate('Home');
+    } else {
+      yield put({ type: 'SIGNINGOOGLE_FAILED', message: result.message });
+    }
+
+    if (result.message === 'Email already exist') {
+      let url = `${API_HOST}/api/auth/sign-in`;
+
+      let data = {
+        email,
+        password,
+      };
+
+      let response = yield call(fetch, url, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      let result = yield response.json();
+
       yield call(token.saveToken, JSON.stringify(result.token));
       let NavigationHelper = createNavigationHelper(_navigator);
       yield put({ type: 'SIGNINGOOGLE_SUCCEED' });

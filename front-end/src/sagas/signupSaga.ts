@@ -12,7 +12,6 @@ function* signupRequest(action: SignUpAction) {
   if (action.type === 'SIGNUP_REQUESTED') {
     let { email, password, first_name, last_name, _navigator } = action;
     let url = `${API_HOST}/api/auth/sign-up`;
-
     let data = {
       email,
       password,
@@ -27,7 +26,6 @@ function* signupRequest(action: SignUpAction) {
       },
     });
     let result = yield response.json();
-    console.log('register:', result);
 
     if (result.success) {
       let NavigationHelper = createNavigationHelper(_navigator);
