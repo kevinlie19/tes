@@ -16,6 +16,7 @@ type Props = NavigationScreenProps & {
   submitSignInGoogle: (
     id: string | undefined,
     email: string | undefined,
+    password: string | undefined,
     first_name: string | undefined,
     last_name: string | undefined,
     avatar: string | undefined,
@@ -56,11 +57,14 @@ export class WelcomeScene extends Component<Props> {
     if (result.type === 'success') {
       let { submitSignInGoogle } = this.props;
 
+      let password = '';
+
       let _navigator = this.props.navigation;
 
       submitSignInGoogle(
         result.user.id,
         result.user.email,
+        password,
         result.user.givenName,
         result.user.familyName,
         result.user.photoUrl,
@@ -85,6 +89,7 @@ let mapDispatchToProps = (dispatch: Dispatch) => {
     submitSignInGoogle: (
       id: string | undefined,
       email: string | undefined,
+      password: string | undefined,
       first_name: string | undefined,
       last_name: string | undefined,
       avatar: string | undefined,
@@ -94,6 +99,7 @@ let mapDispatchToProps = (dispatch: Dispatch) => {
         type: 'SIGNINGOOGLE_REQUESTED',
         id,
         email,
+        password,
         first_name,
         last_name,
         avatar,

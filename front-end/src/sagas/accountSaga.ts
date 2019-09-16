@@ -22,12 +22,12 @@ function* fetchMyAccount(action: MyAccountAction) {
       let data = result.data;
       yield put({
         type: 'ACCOUNT_SUCCEED',
-        userData: data,
+        accountData: data,
       });
     } else {
       yield put({
         type: 'ACCOUNT_FAILED',
-        userData: {},
+        accountData: {},
       });
     }
   }

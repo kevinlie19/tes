@@ -15,12 +15,9 @@ export default function accountReducer(
   action: MyAccountAction,
 ) {
   switch (action.type) {
-    case 'ACCOUNT_REQUESTED': {
-      return { ...accountState };
-    }
     case 'ACCOUNT_SUCCEED': {
       return {
-        ...accountState,
+        ...action.accountData,
       };
     }
     case 'ACCOUNT_FAILED': {

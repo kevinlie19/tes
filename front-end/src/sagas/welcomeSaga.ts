@@ -5,16 +5,25 @@ import { WelcomeAction } from '../types/WelcomeSceneType';
 import { createNavigationHelper } from '../helpers/NavigationHelper';
 
 export default function* signinGoogleSagaWatcher(): any {
-  yield takeLatest('SIGNIN_REQUESTED', signinGoogleRequest);
+  yield takeLatest('SIGNINGOOGLE_REQUESTED', signinGoogleRequest);
 }
 
 function* signinGoogleRequest(action: WelcomeAction) {
   if (action.type === 'SIGNINGOOGLE_REQUESTED') {
-    let { id, email, first_name, last_name, avatar, _navigator } = action;
+    let {
+      id,
+      email,
+      password,
+      first_name,
+      last_name,
+      avatar,
+      _navigator,
+    } = action;
     let url = `${API_HOST}/api/auth/sign-in`;
     let data = {
       id,
       email,
+      password,
       first_name,
       last_name,
       avatar,
