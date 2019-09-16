@@ -24,7 +24,6 @@ function* signinRequest(action: SignInAction) {
       },
     });
     let result = yield response.json();
-    console.log('login:', result);
 
     if (result.success) {
       yield call(token.saveToken, JSON.stringify(result.token));
