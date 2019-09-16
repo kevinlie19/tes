@@ -4,5 +4,5 @@ export type MyAccountState = UserObject;
 
 export type MyAccountAction =
   | { type: 'ACCOUNT_REQUESTED'; authToken: string }
-  | { type: 'ACCOUNT_FAILED'; message: string }
-  | { type: 'ACCOUNT_SUCCEED'; userData: UserObject };
+  | { type: 'ACCOUNT_SUCCEED'; accountData: UserObject }
+  | { type: 'ACCOUNT_FAILED'; message: string };

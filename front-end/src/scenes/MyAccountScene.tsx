@@ -20,7 +20,7 @@ import { RootState } from '../types/State';
 import { UserObject } from '../types/Commons';
 
 type Props = NavigationScreenProps & {
-  userData: UserObject;
+  accountData: UserObject;
   fetchMyAccount: (authToken: string) => void;
 };
 
@@ -41,7 +41,9 @@ export class MyAccountScene extends Component<Props, MyAccountSceneState> {
   };
 
   render() {
-    let { userData } = this.props;
+    let { accountData } = this.props;
+
+    let fullName = accountData.first_name + ' ' + accountData.last_name;
 
     return (
       <View style={styles.container}>
@@ -61,9 +63,9 @@ export class MyAccountScene extends Component<Props, MyAccountSceneState> {
 
         <View style={styles.body}>
           <View style={styles.infoContainer}>
-            <Avatar />
+            <Avatar src={accountData.avatar} />
             <View style={styles.textContainer}>
-              <Text text={userData.first_name} type="large" />
+              <Text text={fullName} type="large" />
               <View style={styles.smallTextContainer}>
                 <Text
                   text="Entrepreneur"
@@ -83,9 +85,9 @@ export class MyAccountScene extends Component<Props, MyAccountSceneState> {
                   newTextStyle={styles.levelText}
                 />
                 <Text
-                  text="Premium"
+                  text={accountData.membership}
                   type="mlarge"
-                  newTextStyle={styles.memberText}
+                  newTextStyle={styles.memberPremiumText}
                 />
               </View>
             </View>
@@ -187,7 +189,7 @@ let mapStateToProps = (state: RootState) => {
   let { accountState } = state;
 
   return {
-    userData: accountState,
+    accountData: accountState,
   };
 };
 
@@ -263,7 +265,7 @@ const styles = StyleSheet.create({
     color: CUSTOM_BROWN,
     marginRight: 59,
   },
-  memberText: {
+  memberPremiumText: {
     color: CUSTOM_YELLOW,
   },
   settingContainer: {
