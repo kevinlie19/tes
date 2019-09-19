@@ -10,15 +10,15 @@ import { Image as Picture } from 'react-native-elements';
 
 type Props = {
   newImageStyle?: StyleProp<ViewStyle>;
-  src?: string;
-  type: 'event' | 'banner' | 'square' | 'xLarge';
+  src?: string | null;
+  type?: 'event' | 'banner' | 'square' | 'xLarge';
   resizeMode?: 'center' | 'contain' | 'stretch' | 'cover' | 'repeat';
 };
 
 export default function Image(props: Props) {
   let { src, type, resizeMode, newImageStyle, ...other } = props;
 
-  return !src ? (
+  return !src || src === null ? (
     <Picture
       source={require('../../assets/images/placeholder.jpg')}
       style={styles[type || 'square']}
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   xLarge: {
-    width: 360,
+    width: '100%',
     height: 240,
   },
 });

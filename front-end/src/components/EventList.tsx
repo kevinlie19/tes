@@ -5,6 +5,7 @@ import { Text, Image } from '../core-ui';
 import { CUSTOM_YELLOW } from '../constants/color';
 
 type Props = {
+  src?: string | null;
   type: 'horizontal' | 'vertical';
   category: string;
   title: string;
@@ -14,7 +15,7 @@ type Props = {
 };
 
 export default function EventList(props: Props) {
-  let { type, category, title, date, price, onPress } = props;
+  let { src, type, category, title, date, price, onPress } = props;
 
   const _renderEventListHorizontal = () => {
     return (
@@ -22,7 +23,7 @@ export default function EventList(props: Props) {
         onPress={onPress}
         style={styles.eventListContainerHorizontal}
       >
-        <Image type="event" />
+        <Image type="event" src={src ? src : null} />
         <Text
           text={category}
           type="xxsmall"
@@ -55,8 +56,8 @@ export default function EventList(props: Props) {
         onPress={onPress}
         style={styles.eventListContainerVertical}
       >
-        <Image type="event" />
-        <View style={{ paddingLeft: 12 }}>
+        <Image type="event" src={src ? src : null} />
+        <View style={styles.eventInfoContainer}>
           <Text text={category} type="xxsmall" />
           <Text
             text={title}
@@ -109,6 +110,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: 16,
     marginBottom: 16,
+  },
+  eventInfoContainer: {
+    paddingLeft: 12,
   },
   titleEventVertical: {
     fontWeight: 'bold',

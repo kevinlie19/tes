@@ -10,6 +10,7 @@ import {
 import { NavigationScreenProps } from 'react-navigation';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import dateFormat from 'dateformat';
 
 import {
   WHITE,
@@ -24,7 +25,7 @@ import {
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
 import { Icon, Text, Image } from '../core-ui';
 import { EventList } from '../components';
-import { token } from '../helpers';
+import { token, eventID } from '../helpers';
 import { RootState } from '../types/State';
 import { HomeObject } from '../types/Commons';
 
@@ -189,7 +190,7 @@ export class HomeScene extends Component<Props, HomeSceneState> {
               </TouchableOpacity>
 
               <View style={styles.eventContainer}>
-                <Text text="Event Terdekat" type="large" />
+                <Text text="Latest Events" type="large" />
                 {this._renderHome()}
               </View>
 
@@ -258,21 +259,22 @@ export class HomeScene extends Component<Props, HomeSceneState> {
       <FlatList
         style={styles.events}
         horizontal={true}
-        data={homeData.events}
+        data={homeData.events.slice(0, 3)}
         extraData={this.state}
         renderItem={({ item }) => {
           return (
             <EventList
+              src={item.image}
               type="horizontal"
               category={item.category}
               title={item.event_name}
-              date={item.place}
+              date={dateFormat(item.event_date, 'dd mmmm yyyy')}
               price={item.price}
-              onPress={() => {}}
+              onPress={() => this._onPressEvent(item.id)}
             />
           );
         }}
-        keyExtractor={(item, index) => (index + item.id).toString()}
+        keyExtractor={(item) => item.id.toString()}
       />
     ) : (
       <View />
@@ -285,6 +287,11 @@ export class HomeScene extends Component<Props, HomeSceneState> {
       this.setState({ isRefresh: false });
     });
   };
+
+  async _onPressEvent(eventId: string) {
+    await eventID.saveEventID(String(eventId));
+    this.props.navigation.navigate('EventDetail');
+  }
 }
 
 let mapStateToProps = (state: RootState) => {

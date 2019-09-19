@@ -30,7 +30,7 @@ type Props = TextProps & {
     | 'mlarge'
     | 'large'
     | 'xlarge';
-  text: string;
+  text: string | String;
   onPress?: () => void;
 };
 

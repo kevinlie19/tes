@@ -15,7 +15,7 @@ import {
   CUSTOM_BROWN,
 } from '../constants/color';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
-import { token } from '../helpers';
+import { token, eventID } from '../helpers';
 import { RootState } from '../types/State';
 import { UserObject } from '../types/Commons';
 
@@ -181,6 +181,7 @@ export class MyAccountScene extends Component<Props, MyAccountSceneState> {
 
   _onPressLogOut = async () => {
     await token.removeToken();
+    await eventID.removeEventID();
     this.props.navigation.navigate('Welcome');
   };
 }

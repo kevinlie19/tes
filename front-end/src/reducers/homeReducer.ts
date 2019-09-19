@@ -30,7 +30,6 @@ export default function homeReducer(
     case 'FETCH_HOME_FAILED': {
       return {
         ...homeSceneState,
-        postData: [],
       };
     }
     default: {
