@@ -35,8 +35,8 @@ export class SignUpScene extends Component<Props, SignUpSceneState> {
     email: '',
     password: '',
     repeatPassword: '',
-    first_name: 'Kevin',
-    last_name: 'Lie',
+    first_name: '',
+    last_name: '',
   };
 
   componentDidUpdate() {
@@ -59,6 +59,8 @@ export class SignUpScene extends Component<Props, SignUpSceneState> {
             onChangeTextEmail={this._onChangeEmail}
             onChangeTextPassword={this._onChangePassword}
             onChangeTextRepeatPassword={this._onChangeRepeatPassword}
+            onChangeTextFirstName={this._onChangeFirstName}
+            onChangeTextLastName={this._onChangeLastName}
             onPress={this._onSubmitSignUp}
           />
         </View>
@@ -84,6 +86,18 @@ export class SignUpScene extends Component<Props, SignUpSceneState> {
     });
   };
 
+  _onChangeFirstName = (newFirstName: string) => {
+    this.setState({
+      first_name: newFirstName,
+    });
+  };
+
+  _onChangeLastName = (newLastName: string) => {
+    this.setState({
+      last_name: newLastName,
+    });
+  };
+
   _onSubmitSignUp = () => {
     let { email, password, repeatPassword, first_name, last_name } = this.state;
     let { submitSignUp } = this.props;
@@ -102,8 +116,6 @@ export class SignUpScene extends Component<Props, SignUpSceneState> {
     } else {
       submitSignUp(email, password, first_name, last_name, _navigator);
     }
-
-    // submitSignUp(email, password, first_name, last_name, _navigator);
   };
 }
 

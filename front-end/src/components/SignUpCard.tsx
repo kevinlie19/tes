@@ -5,10 +5,12 @@ import { Text, Button, TextInput } from '../core-ui';
 import { WHITE } from '../constants/color';
 
 type Props = {
-  onChangeTextEmail?: (text: string) => void;
-  onChangeTextPassword?: (text: string) => void;
-  onChangeTextRepeatPassword?: (text: string) => void;
-  onPress?: () => void;
+  onChangeTextEmail: (text: string) => void;
+  onChangeTextPassword: (text: string) => void;
+  onChangeTextRepeatPassword: (text: string) => void;
+  onChangeTextFirstName: (text: string) => void;
+  onChangeTextLastName: (text: string) => void;
+  onPress: () => void;
 };
 
 export default function SignUpCard(props: Props) {
@@ -16,6 +18,8 @@ export default function SignUpCard(props: Props) {
     onChangeTextEmail,
     onChangeTextPassword,
     onChangeTextRepeatPassword,
+    onChangeTextFirstName,
+    onChangeTextLastName,
     onPress,
   } = props;
 
@@ -35,6 +39,16 @@ export default function SignUpCard(props: Props) {
       <TextInput
         placeholder="Repeat Password"
         onChangeText={onChangeTextRepeatPassword}
+        newContainerStyle={styles.textinputContainer}
+      />
+      <TextInput
+        placeholder="First Name"
+        onChangeText={onChangeTextFirstName}
+        newContainerStyle={styles.textinputContainer}
+      />
+      <TextInput
+        placeholder="Last Name"
+        onChangeText={onChangeTextLastName}
         newContainerStyle={styles.textinputContainer}
       />
       <Button
@@ -70,7 +84,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
   },
   buttonContainer: {
-    marginTop: 40,
+    marginTop: 20,
     marginBottom: 30,
   },
 });
