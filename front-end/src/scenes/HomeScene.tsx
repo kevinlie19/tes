@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+  FlatList,
+} from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 
 import {
   WHITE,
@@ -12,22 +21,42 @@ import {
   GREY,
   DARK_GREY,
 } from '../constants/color';
-import { Icon, Text, Image } from '../core-ui';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
+import { Icon, Text, Image } from '../core-ui';
 import { EventList } from '../components';
+import { token } from '../helpers';
+import { RootState } from '../types/State';
+import { HomeObject } from '../types/Commons';
 
-type Props = NavigationScreenProps & {};
-
-type State = {
-  isPremium: boolean;
+type Props = NavigationScreenProps & {
+  homeData: HomeObject;
+  fetchHome: (authToken: string, _navigator: any) => void;
 };
 
-export default class HomeScene extends Component<Props, State> {
-  state: State = {
-    isPremium: false,
+type HomeSceneState = {
+  isRefresh: boolean;
+};
+
+export class HomeScene extends Component<Props, HomeSceneState> {
+  state: HomeSceneState = {
+    isRefresh: false,
   };
+
+  async componentDidMount() {
+    this._asyncStorage();
+  }
+
+  _asyncStorage = async () => {
+    let { fetchHome } = this.props;
+    let userToken = await token.getToken();
+
+    if (userToken) {
+      await fetchHome(userToken, this.props.navigation);
+    }
+  };
+
   render() {
-    let { isPremium } = this.state;
+    let { homeData } = this.props;
 
     return (
       <View style={styles.container}>
@@ -46,7 +75,14 @@ export default class HomeScene extends Component<Props, State> {
         </View>
 
         <View style={styles.body}>
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.isRefresh}
+                onRefresh={this._onRefresh}
+              />
+            }
+          >
             <View>
               <View style={styles.infoContainer}>
                 <View style={styles.levelContainer}>
@@ -64,27 +100,38 @@ export default class HomeScene extends Component<Props, State> {
                     />
                   </View>
                 </View>
-                <View style={styles.dividerInfo} />
                 <View style={styles.memberContainer}>
                   <Icon
                     name="membership"
-                    isActive={isPremium ? false : true}
+                    isActive={
+                      homeData.user.membership === 'Premium' ? false : true
+                    }
                     customStyle={styles.memberIcon}
                   />
                   <View style={styles.memberTextContainer}>
                     <Text
-                      text={isPremium ? 'Membership' : 'Basic'}
+                      text={
+                        homeData.user.membership === 'Premium'
+                          ? 'Membership'
+                          : 'Basic'
+                      }
                       type="medium"
                       newTextStyle={
-                        isPremium ? styles.entrepreneurText : styles.basicText
+                        homeData.user.membership === 'Premium'
+                          ? styles.entrepreneurText
+                          : styles.basicText
                       }
                     />
                     <Text
-                      text={isPremium ? 'Premium' : 'UPGRADE'}
+                      text={
+                        homeData.user.membership === 'Premium'
+                          ? 'Premium'
+                          : 'UPGRADE'
+                      }
                       type="mlarge"
                       newTextStyle={styles.upgradeText}
                       onPress={
-                        !isPremium
+                        homeData.user.membership !== 'Premium'
                           ? () =>
                               this.props.navigation.navigate(
                                 'UpgradeMembership',
@@ -102,7 +149,10 @@ export default class HomeScene extends Component<Props, State> {
                   <Text text="Forum" type="medium" />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.menus}>
+                <TouchableOpacity
+                  style={styles.menus}
+                  onPress={() => this.props.navigation.navigate('Event')}
+                >
                   <Icon name="event" />
                   <Text text="Events" type="medium" />
                 </TouchableOpacity>
@@ -115,12 +165,17 @@ export default class HomeScene extends Component<Props, State> {
                 <TouchableOpacity
                   style={styles.menus}
                   onPress={
-                    isPremium
+                    homeData.user.membership !== 'Premium'
                       ? () => this.props.navigation.navigate('Home')
                       : () => {}
                   }
                 >
-                  <Icon name="cart" isActive={isPremium ? true : false} />
+                  <Icon
+                    name="cart"
+                    isActive={
+                      homeData.user.membership === 'Premium' ? true : false
+                    }
+                  />
                   <Text
                     text="Market"
                     type="medium"
@@ -135,33 +190,7 @@ export default class HomeScene extends Component<Props, State> {
 
               <View style={styles.eventContainer}>
                 <Text text="Event Terdekat" type="large" />
-                <ScrollView
-                  horizontal={true}
-                  indicatorStyle="white"
-                  contentContainerStyle={{ padding: 5, margin: 5 }}
-                >
-                  <EventList
-                    category="WORKSHOP"
-                    title="Talkshow Menjadi Seorang Entrepreneur"
-                    date="01 Desember 2019"
-                    price="Rp 400.000"
-                    onPress={() => {}}
-                  />
-                  <EventList
-                    category="SEMINAR"
-                    title="Motivasi Kaya"
-                    date="01 Desember 2019"
-                    price="Rp 400.000"
-                    onPress={() => {}}
-                  />
-                  <EventList
-                    category="WORKSHOP"
-                    title="Mental Baja Seorang Entrepreneur"
-                    date="01 Desember 2019"
-                    price="Rp 400.000"
-                    onPress={() => {}}
-                  />
-                </ScrollView>
+                {this._renderHome()}
               </View>
 
               <View style={styles.latestNewsContainer}>
@@ -221,7 +250,63 @@ export default class HomeScene extends Component<Props, State> {
       </View>
     );
   }
+
+  _renderHome = () => {
+    let { homeData } = this.props;
+
+    return homeData ? (
+      <FlatList
+        style={styles.events}
+        horizontal={true}
+        data={homeData.events}
+        extraData={this.state}
+        renderItem={({ item }) => {
+          return (
+            <EventList
+              type="horizontal"
+              category={item.category}
+              title={item.event_name}
+              date={item.place}
+              price={item.price}
+              onPress={() => {}}
+            />
+          );
+        }}
+        keyExtractor={(item, index) => (index + item.id).toString()}
+      />
+    ) : (
+      <View />
+    );
+  };
+
+  _onRefresh = () => {
+    this.setState({ isRefresh: true });
+    this._asyncStorage().then(() => {
+      this.setState({ isRefresh: false });
+    });
+  };
 }
+
+let mapStateToProps = (state: RootState) => {
+  let { homeState } = state;
+
+  return {
+    homeData: homeState.homeData,
+  };
+};
+
+let mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    fetchHome: (authToken: string, _navigator: any) => {
+      dispatch({ type: 'FETCH_HOME_REQUESTED', authToken, _navigator });
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(HomeScene);
 
 const styles = StyleSheet.create({
   container: {
@@ -285,19 +370,19 @@ const styles = StyleSheet.create({
     color: CUSTOM_BROWN,
     paddingTop: 4,
   },
-  dividerInfo: {
-    borderLeftWidth: 1,
-    borderLeftColor: CUSTOM_WHITE,
-  },
   memberContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    borderLeftWidth: 1,
+    borderLeftColor: CUSTOM_WHITE,
+    paddingRight: 24,
   },
   memberIcon: {
     width: 40,
     height: 40,
-    marginRight: 4,
+    marginRight: 5,
+    marginLeft: 10,
   },
   memberTextContainer: {
     flexDirection: 'column',
@@ -329,6 +414,9 @@ const styles = StyleSheet.create({
   eventContainer: {
     marginVertical: 24,
     marginHorizontal: 16,
+  },
+  events: {
+    paddingTop: 15,
   },
   latestNewsContainer: {
     marginBottom: 24,
