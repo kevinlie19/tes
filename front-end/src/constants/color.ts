@@ -3,6 +3,7 @@ export const CUSTOM_BROWN = '#D3793D';
 export const CUSTOM_YELLOW = '#FFB900';
 export const CUSTOM_GREEN = '#26AD6A';
 export const CUSTOM_BLACK = '#2D2D2D';
+export const MIDDLE_BLACK = '#353535';
 export const LIGHT_BLACK = '#454545';
 export const CUSTOM_WHITE = '#E7E7E7';
 export const HALF_TRANSPARENT = '#00000080';

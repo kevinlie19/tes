@@ -5,6 +5,7 @@ import HomeScene from '../../scenes/HomeScene';
 import UpgradeMembershipScene from '../../scenes/UpgradeMembershipScene';
 import ConfirmUpgradeMembershipScene from '../../scenes/ConfirmUpgradeMembershipScene';
 import EventScene from '../../scenes/EventScene';
+import EventDetailScene from '../../scenes/EventDetailScene';
 import TransactionScene from '../../scenes/TransactionScene';
 import InboxScene from '../../scenes/InboxScene';
 import MyAccountScene from '../../scenes/MyAccountScene';
@@ -28,6 +29,10 @@ const AppStack = createStackNavigator({
   },
   Event: {
     screen: EventScene,
+    navigationOptions: { header: null },
+  },
+  EventDetail: {
+    screen: EventDetailScene,
     navigationOptions: { header: null },
   },
   Transaction: {

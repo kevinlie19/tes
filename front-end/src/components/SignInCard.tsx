@@ -37,7 +37,7 @@ export default function SignInCard(props: Props) {
         buttonType="secondary"
         text="SIGN IN"
         newStyleText={styles.textButton}
-        newStyleButton={styles.buttonContainer}
+        newStyleButton={styles.buttonSignIn}
         onPress={onPress}
       />
     </View>
@@ -73,8 +73,10 @@ const styles = StyleSheet.create({
   textButton: {
     fontWeight: 'normal',
   },
-  buttonContainer: {
+  buttonSignIn: {
     marginTop: 40,
     marginBottom: 58,
+    marginHorizontal: 24,
+    alignSelf: 'stretch',
   },
 });

@@ -30,16 +30,15 @@ export default class WelcomeCard extends Component<Props, State> {
         <Button
           buttonType="secondary"
           text="SIGN UP"
+          newStyleButton={styles.buttonSignUp}
           newStyleText={styles.textButton}
           onPress={onPressButtonSignUp}
         />
-
         <View style={styles.dividerContainer}>
           <View style={styles.divider} />
           <Text type="medium" text="   or   " newTextStyle={styles.greyText} />
           <View style={styles.divider} />
         </View>
-
         <Button
           buttonType="google"
           newStyleText={styles.textButton}
@@ -76,6 +75,10 @@ const styles = StyleSheet.create({
   title: {
     paddingTop: 40,
     fontWeight: 'normal',
+  },
+  buttonSignUp: {
+    marginHorizontal: 24,
+    alignSelf: 'stretch',
   },
   textButton: {
     fontWeight: 'normal',

@@ -55,7 +55,7 @@ export default function SignUpCard(props: Props) {
         buttonType="secondary"
         text="SIGN UP"
         newStyleText={styles.textButton}
-        newStyleButton={styles.buttonContainer}
+        newStyleButton={styles.buttonSignUp}
         onPress={onPress}
       />
     </View>
@@ -83,8 +83,10 @@ const styles = StyleSheet.create({
   textButton: {
     fontWeight: 'normal',
   },
-  buttonContainer: {
+  buttonSignUp: {
     marginTop: 20,
     marginBottom: 30,
+    marginHorizontal: 24,
+    alignSelf: 'stretch',
   },
 });

@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { NavigationScreenProps, FlatList } from 'react-navigation';
+import { StyleSheet, View, FlatList } from 'react-native';
+import { NavigationScreenProps } from 'react-navigation';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import { RootState } from '../types/State';
 import { HomeObject } from '../types/Commons';
-import { token } from '../helpers';
+import { token, eventID } from '../helpers';
 import { Icon, Text, Image } from '../core-ui';
+import { EventList } from '../components';
 import { CUSTOM_BLACK, WHITE } from '../constants/color';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
-import { EventList } from '../components';
 
 type Props = NavigationScreenProps & {
   homeData: HomeObject;
@@ -22,6 +22,10 @@ type EventSceneState = {
 };
 
 export class EventScene extends Component<Props, EventSceneState> {
+  state: EventSceneState = {
+    isRefresh: false,
+  };
+
   async componentDidMount() {
     this._asyncStorage();
   }
@@ -73,21 +77,26 @@ export class EventScene extends Component<Props, EventSceneState> {
     return homeData ? (
       <FlatList
         style={styles.events}
+        onRefresh={this._onRefresh}
+        refreshing={this.state.isRefresh}
         data={homeData.events}
         extraData={this.state}
         renderItem={({ item }) => {
           return (
             <EventList
+              src={item.image}
               type="vertical"
               category={item.category}
               title={item.event_name}
-              date={item.place}
+              date={item.event_date}
               price={item.price}
-              onPress={() => {}}
+              onPress={() => {
+                this._onPressEvent(item.id);
+              }}
             />
           );
         }}
-        keyExtractor={(item, index) => (index + item.id).toString()}
+        keyExtractor={(item) => item.id.toString()}
       />
     ) : (
       <View />
@@ -100,6 +109,11 @@ export class EventScene extends Component<Props, EventSceneState> {
       this.setState({ isRefresh: false });
     });
   };
+
+  async _onPressEvent(eventId: string) {
+    await eventID.saveEventID(String(eventId));
+    this.props.navigation.navigate('EventDetail');
+  }
 }
 
 let mapStateToProps = (state: RootState) => {

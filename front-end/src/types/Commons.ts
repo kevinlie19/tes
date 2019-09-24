@@ -13,6 +13,7 @@ export type EventObject = {
   id: string;
   event_name: string;
   category: string;
+  event_date: string;
   place: string;
   price: number;
   description: string;
