@@ -4,6 +4,7 @@ const initialMyAccountState: MyAccountState = {
   id: '',
   avatar: null,
   email: '',
+  user_role: 'User',
   first_name: '',
   last_name: '',
   membership: 'Basic',

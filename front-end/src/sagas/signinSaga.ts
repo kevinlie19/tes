@@ -24,7 +24,7 @@ function* signinRequest(action: SignInAction) {
       },
     });
     let result = yield response.json();
-
+    console.log(result);
     if (result.success) {
       yield call(token.saveToken, JSON.stringify(result.token));
       let NavigationHelper = createNavigationHelper(_navigator);

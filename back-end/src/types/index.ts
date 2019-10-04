@@ -40,6 +40,7 @@ export type ReqEditProfileObject = {
   last_name: string;
   isAvatarChange?: boolean;
   image: string | null;
+  membership: 'Basic' | 'Premium';
   gender: 'Male' | 'Female' | 'Other';
 };
 

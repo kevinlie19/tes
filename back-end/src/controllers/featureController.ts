@@ -10,7 +10,13 @@ import { uploader } from '../cloudinarySetup';
 async function editProfile(req: Request, res: Response) {
   try {
     let decoded = (<any>req).decoded;
-    let { isAvatarChange, first_name, last_name, gender } = req.body;
+    let {
+      isAvatarChange,
+      first_name,
+      last_name,
+      membership,
+      gender,
+    } = req.body;
     if (!first_name || !gender) {
       res.status(SERVER_OK).json({
         success: false,
@@ -26,7 +32,7 @@ async function editProfile(req: Request, res: Response) {
         .then(async (db_result: any) => {
           let image = db_result.url;
           let result: ResponseObject = await userModel.updateUser(
-            { image, first_name, last_name, gender },
+            { image, first_name, last_name, membership, gender },
             decoded,
           );
 
@@ -47,7 +53,7 @@ async function editProfile(req: Request, res: Response) {
         );
     } else if (isAvatarChange === 'false') {
       let result: ResponseObject = await userModel.updateUser(
-        { image: null, first_name, last_name, gender },
+        { image: null, first_name, last_name, membership, gender },
         decoded,
       );
       if (result.success) {
