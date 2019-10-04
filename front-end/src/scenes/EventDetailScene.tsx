@@ -148,6 +148,7 @@ export class EventDetailScene extends Component<Props, EventDetailSceneState> {
             buttonType="primary"
             text="RESERVE NOW"
             newStyleText={styles.buttonText}
+            onPress={() => this.props.navigation.navigate('MyTicket')}
           />
         </View>
       </View>
