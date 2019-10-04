@@ -120,7 +120,7 @@ async function getEventById(id: string) {
   }
 }
 
-async function editEvent(eventObject: ReqEditEventObject, id) {
+async function editEvent(eventObject: ReqEditEventObject, id: any) {
   try {
     let {
       event_name,
