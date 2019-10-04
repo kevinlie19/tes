@@ -1,12 +1,21 @@
 export type UserObject = {
   id: string;
   email: string;
-  user_role: string;
+  user_role: 'User' | 'Admin';
   first_name: string;
   last_name: string;
   avatar: string | null;
-  membership: string;
-  gender: string;
+  membership: 'Basic' | 'Premium';
+  gender: 'Male' | 'Female' | 'Other';
+};
+
+export type EditProfileObject = {
+  first_name: string;
+  last_name: string;
+  avatar: string | null;
+  membership: 'Basic' | 'Premium';
+  gender: 'Male' | 'Female' | 'Other';
+  isAvatarChanged: boolean;
 };
 
 export type EventObject = {
