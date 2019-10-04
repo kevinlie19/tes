@@ -42,7 +42,7 @@ export default function EventList(props: Props) {
           newTextStyle={styles.dateEventHorizontal}
         />
         <Text
-          text={'Rp ' + price}
+          text={'Rp ' + Intl.NumberFormat('id-ID').format(price)}
           type="xsmall"
           newTextStyle={styles.priceEventHorizontal}
         />
@@ -72,7 +72,7 @@ export default function EventList(props: Props) {
             newTextStyle={styles.dateEventVertical}
           />
           <Text
-            text={'Rp ' + price}
+            text={'Rp ' + Intl.NumberFormat('id-ID').format(price)}
             type="xsmall"
             newTextStyle={styles.priceEventVertical}
           />
