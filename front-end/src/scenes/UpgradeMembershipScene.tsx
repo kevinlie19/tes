@@ -1,84 +1,107 @@
 import React, { Component } from 'react';
-import { StyleSheet, View,  TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 
-import {
-  WHITE,
-  CUSTOM_BLACK,
-  LIGHT_GREY,
-  CUSTOM_YELLOW,
-  CUSTOM_WHITE,
-  CUSTOM_BROWN,
-  GREY,
-  DARK_GREY,
-} from '../constants/color';
-
-import { Icon, Text, Image, Button } from '../core-ui';
+import { CUSTOM_BLACK, WHITE, CUSTOM_YELLOW } from '../constants/color';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
+import { Icon, Text, Button } from '../core-ui';
 
 type Props = NavigationScreenProps & {};
 
-type State = {
-  isPremium: boolean;
-};
+type UpgradeMembershipSceneState = {};
 
-export default class UpgradeMembershipScene extends Component<Props, State> {
-  state: State = {
-    isPremium: false,
-  };
+export default class SignInScene extends Component<
+  Props,
+  UpgradeMembershipSceneState
+> {
   render() {
-    let { isPremium } = this.state;
-    
     return (
       <View style={styles.container}>
         <View style={styles.navbar}>
           <View style={styles.navbarContainer}>
+            <Icon
+              name="arrowBack"
+              customStyle={styles.arrowBack}
+              onPress={() => this.props.navigation.goBack()}
+            />
+
             <Text
-              text= "Upgrade Membership"
-              type= "headerTitle"
+              text="Upgrade Membership"
+              type="headerTitle"
               newTextStyle={styles.titleText}
             />
+          </View>
         </View>
-        </View>
-     
         <View style={styles.body}>
-        <Icon
-            name="membership"
-            isActive={false}
-            customStyle={styles.memberIcon}
+          <View style={{ alignItems: 'center', marginTop: 48 }}>
+            <Icon
+              name="membership"
+              isActive={false}
+              customStyle={styles.iconMembership}
             />
-        <View style={styles.tulisan}>
-          <Text text=" Upgrade to " type="large" newTextStyle={styles.textUpgrade}/>
-          <Text text={isPremium ? 'Premium' : 'PREMIUM'}
-                      type="large"
-                      newTextStyle={styles.upgradeText} ></Text>
-        </View>
-        <View style={styles.getText}>
-          <Text text=" You will get : " type="medium"/>
-        </View>
-       
-         <View style={styles.descText}>
-            
-            <Text text=" 1. Booth Discount - 5% (platinum only) " type="medium"/>
-            <Text text=" 2. VIP registration/seating at the general session - 50%(platinum), 30(gold), 15(silver), 5(bronze)" type="medium"/>
-            <Text text=" 3. Premium badge recognition" type="medium"/>
-            <Text text=" 4. Premium level acknowledgement boot carpet decals - 2(platinum), 1(gold)" type="medium"/>
-            <Text text=" 5. Show floor acknowledgement signage " type="medium"/>
-            <Text text=" 6. Premium level acknowledgement table signs" type="medium"/>
-        </View>
+          </View>
+          <View
+            style={{ flexDirection: 'row', marginTop: 16, marginBottom: 24 }}
+          >
+            <Text text="Upgrade to " type="mlarge" />
+            <Text
+              text="PREMIUM"
+              type="mlarge"
+              newTextStyle={{ color: CUSTOM_YELLOW }}
+            />
+          </View>
 
-        <View style={styles.idrText}>
-          <Text text="IDR" type="small" newTextStyle={styles.smallText}></Text>
-          <Text text="1.350.000 " type="xlarge" newTextStyle={styles.priceText}/>
-        </View>
-        
-        <TouchableOpacity>
-            <Button
+          <Text text="You will get:" type="medium" />
+
+          <View style={{ marginTop: 16, marginBottom: 40 }}>
+            <Text text="1. Booth discount - 5% (platinum only)" type="small" />
+            <Text
+              text="2. VIP registration/seating at the general"
+              type="small"
+            />
+            <Text
+              text="     session - 50 (platinum), 30 (gold), 15"
+              type="small"
+            />
+            <Text text="     (silver), 5 (bronze)" type="small" />
+            <Text text="3. Premium badge recognition" type="small" />
+            <Text text="4. Premium level acknowledgment booth" type="small" />
+            <Text
+              text="     carpet decals - 2 (platinum), 1 (gold)"
+              type="small"
+            />
+            <Text text="5. show floor acknowledgment signage" type="small" />
+            <Text text="6. Premium level acknowledgment table" type="small" />
+            <Text text="     signs" type="small" />
+          </View>
+
+          <View style={{ flexDirection: 'row' }}>
+            <Text
+              text="ID"
+              type="medium"
+              newTextStyle={{ paddingTop: 12, paddingRight: 24 }}
+            />
+            <Text
+              text="1.350.000"
+              type="xlarge"
+              newTextStyle={{ color: CUSTOM_YELLOW }}
+            />
+          </View>
+
+          <Button
             buttonType="primary"
             text="UPGRADE NOW"
-            newStyleText={styles.textButton}
-            />
-          </TouchableOpacity>
+            onPress={() =>
+              this.props.navigation.navigate('ProceedUpgradeMembership')
+            }
+            newStyleButton={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: 16,
+            }}
+            newStyleText={{ fontWeight: 'normal' }}
+          />
         </View>
       </View>
     );
@@ -87,10 +110,9 @@ export default class UpgradeMembershipScene extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
   },
   navbar: {
-    flex: 1,
     backgroundColor: CUSTOM_BLACK,
   },
   navbarContainer: {
@@ -102,67 +124,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     height: 56,
   },
+  arrowBack: {
+    width: 24,
+    height: 24,
+  },
   titleText: {
-    paddingRight: 20,
+    paddingRight: 75,
   },
   body: {
     flex: 7,
     backgroundColor: WHITE,
-  },
-  button:{
-    paddingTop: 25,
-  },
-  textButton: {
-    fontWeight: 'bold',
     alignItems: 'center',
   },
-  icon:{
-    width:100,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  memberIcon: {
+  iconMembership: {
     width: 80,
     height: 80,
-    alignItems: 'center',
-    marginLeft: 140,
-    marginTop: 120,
   },
-  textUpgrade:{
-    marginLeft: 100 ,
-  },
-  tulisan:{
-    flexDirection:'row',
-    width: 328,
-    height:30,
-    marginTop:16,
-  },
-  upgradeText: {
-    color: CUSTOM_YELLOW,
-  },
-  priceText: {
-    color: CUSTOM_YELLOW,
-    fontWeight: 'bold',
-    alignItems:'center',
-    textAlign:'center',
-  },
-  descText:{
-    marginTop:20,
-    marginBottom:20,
-    marginLeft: 20,
-    marginRight:20,
-  },
-  getText:{
-    marginTop: 16,
-    marginLeft: 130,
-  },
-  idrText:{
-    flexDirection:'row',
-    marginTop:20,
-    marginBottom:20,
-    marginLeft: 75,
-  },
-  smallText:{
-    marginTop: 12,
-  }
 });

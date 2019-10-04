@@ -130,7 +130,10 @@ export class MyAccountScene extends Component<Props, MyAccountSceneState> {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.tabs}>
+          <TouchableOpacity
+            style={styles.tabs}
+            onPress={() => this.props.navigation.navigate('Transaction')}
+          >
             <Icon
               name="transaction"
               isActive={false}

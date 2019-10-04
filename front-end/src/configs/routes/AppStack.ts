@@ -3,12 +3,14 @@ import { createStackNavigator } from 'react-navigation-stack';
 import WelcomeScene from '../../scenes/WelcomeScene';
 import HomeScene from '../../scenes/HomeScene';
 import UpgradeMembershipScene from '../../scenes/UpgradeMembershipScene';
+import ProceedUpgradeMembershipScene from '../../scenes/ProceedUpgradeMembershipScene';
 import ConfirmUpgradeMembershipScene from '../../scenes/ConfirmUpgradeMembershipScene';
 import EventScene from '../../scenes/EventScene';
 import EventDetailScene from '../../scenes/EventDetailScene';
 import TransactionScene from '../../scenes/TransactionScene';
 import InboxScene from '../../scenes/InboxScene';
 import MyAccountScene from '../../scenes/MyAccountScene';
+import PaymentScene from '../../scenes/PaymentScene';
 
 const AppStack = createStackNavigator({
   Welcome: {
@@ -23,7 +25,11 @@ const AppStack = createStackNavigator({
     screen: UpgradeMembershipScene,
     navigationOptions: { header: null },
   },
-  ConfirmUpgrade: {
+  ProceedUpgradeMembership: {
+    screen: ProceedUpgradeMembershipScene,
+    navigationOptions: { header: null },
+  },
+  ConfirmUpgradeMembership: {
     screen: ConfirmUpgradeMembershipScene,
     navigationOptions: { header: null },
   },
@@ -45,6 +51,10 @@ const AppStack = createStackNavigator({
   },
   MyAccount: {
     screen: MyAccountScene,
+    navigationOptions: { header: null },
+  },
+  Payment: {
+    screen: PaymentScene,
     navigationOptions: { header: null },
   },
 });

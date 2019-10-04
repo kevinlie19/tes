@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 
-import { CUSTOM_BLACK, WHITE, CUSTOM_YELLOW } from '../constants/color';
+import { CUSTOM_BLACK, WHITE } from '../constants/color';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
 import { Icon, Text, Button } from '../core-ui';
 
 type Props = NavigationScreenProps & {};
 
-type ConfirmUpgradeMembershipSceneState = {};
+type ProceedUpgradeMembershipSceneState = {};
 
-export default class ConfirmUpgradeMembershipScene extends Component<
+export default class ProceedUpgradeMembershipScene extends Component<
   Props,
-  ConfirmUpgradeMembershipSceneState
+  ProceedUpgradeMembershipSceneState
 > {
   render() {
     return (
@@ -34,45 +34,31 @@ export default class ConfirmUpgradeMembershipScene extends Component<
         </View>
 
         <View style={styles.body}>
-          <View
-            style={{ alignItems: 'center', marginTop: 168, marginBottom: 24 }}
-          >
+          <View style={styles.iconContainer}>
             <Icon
               name="membership"
               isActive={false}
               customStyle={styles.iconMembership}
             />
           </View>
-          <View style={{ alignItems: 'center' }}>
+          <View style={styles.contentContainer}>
             <Text
-              text="You are now a"
+              text="Please proceed to payment to upgrade your"
               type="mlarge"
               newTextStyle={styles.normalText}
             />
-            <View style={{ flexDirection: 'row' }}>
-              <Text
-                text="PREMIUM"
-                type="mlarge"
-                newTextStyle={{ fontWeight: 'normal', color: CUSTOM_YELLOW }}
-              />
-              <Text
-                text=" Member"
-                type="mlarge"
-                newTextStyle={styles.normalText}
-              />
-            </View>
+            <Text
+              text="membership status"
+              type="mlarge"
+              newTextStyle={styles.normalText}
+            />
           </View>
           <Button
             buttonType="primary"
-            text="THANKS!"
-            onPress={() => this.props.navigation.navigate('Home')}
-            newStyleButton={{
-              position: 'absolute',
-              left: 0,
-              right: 0,
-              bottom: 16,
-            }}
-            newStyleText={{ fontWeight: 'normal' }}
+            text="PROCEED TO PAYMENT"
+            onPress={() => this.props.navigation.navigate('Payment')}
+            newStyleButton={styles.buttonContainer}
+            newStyleText={styles.normalText}
           />
         </View>
       </View>
@@ -108,9 +94,23 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     alignItems: 'center',
   },
+  iconContainer: {
+    alignItems: 'center',
+    marginTop: 168,
+    marginBottom: 24,
+  },
   iconMembership: {
     width: 80,
     height: 80,
+  },
+  contentContainer: {
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 16,
   },
   normalText: {
     fontWeight: 'normal',

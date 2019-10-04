@@ -211,7 +211,10 @@ export class HomeScene extends Component<Props, HomeSceneState> {
             <Text text="Home" type="small" newTextStyle={styles.homeText} />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.tabs}>
+          <TouchableOpacity
+            style={styles.tabs}
+            onPress={() => this.props.navigation.navigate('Transaction')}
+          >
             <Icon
               name="transaction"
               isActive={false}
