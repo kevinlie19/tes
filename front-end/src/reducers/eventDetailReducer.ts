@@ -15,6 +15,13 @@ const initialState: EventDetailState = {
     available_seat: 0,
     image: null,
   },
+  ticketData: {
+    eventId: '',
+    userId: '',
+    ticket_type: '',
+    ticket_qty: 0,
+    totalPrice: 0,
+  },
 };
 
 export default function eventDetailReducer(
@@ -29,6 +36,17 @@ export default function eventDetailReducer(
       };
     }
     case 'FETCH_EVENT_DETAIL_FAILED': {
+      return {
+        ...eventDetailState,
+      };
+    }
+    case 'FETCH_TICKET_SUCCEED': {
+      return {
+        ...eventDetailState,
+        ticketData: action.ticketData,
+      };
+    }
+    case 'FETCH_TICKET_FAILED': {
       return {
         ...eventDetailState,
       };

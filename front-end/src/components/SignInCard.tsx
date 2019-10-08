@@ -20,11 +20,14 @@ export default function SignInCard(props: Props) {
         placeholder="Email"
         onChangeText={onChangeTextEmail}
         newContainerStyle={styles.textinputContainer}
+        autoFocus={true}
+        autoCapitalize={'none'}
       />
       <TextInput
         placeholder="Password"
         onChangeText={onChangeTextPassword}
         newContainerStyle={styles.textinputContainer}
+        autoCapitalize={'none'}
       />
       <TouchableOpacity style={styles.forgetPasswordContainer}>
         <Text

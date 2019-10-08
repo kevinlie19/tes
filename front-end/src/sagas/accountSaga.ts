@@ -20,6 +20,7 @@ function* fetchMyAccount(action: MyAccountAction) {
       },
     });
     let result = yield response.json();
+
     if (result.success) {
       let data = result.data;
       yield put({
@@ -38,7 +39,7 @@ function* fetchMyAccount(action: MyAccountAction) {
 function* fetchEditProfile(action: MyAccountAction) {
   if (action.type === 'FETCH_EDIT_PROFILE_REQUESTED') {
     let { authToken, updateObject } = action;
-    console.log(updateObject);
+
     let {
       first_name,
       last_name,
@@ -72,7 +73,7 @@ function* fetchEditProfile(action: MyAccountAction) {
       body: newData,
     });
     let result = yield response.json();
-    console.log(result);
+
     if (result.success) {
       let data = result.data;
       yield put({

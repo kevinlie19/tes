@@ -125,7 +125,7 @@ let mapStateToProps = (state: RootState) => {
 
   return {
     eventDetailData: eventDetailState.eventDetailData,
-    accountData: accountState,
+    accountData: accountState.accountData,
   };
 };
 

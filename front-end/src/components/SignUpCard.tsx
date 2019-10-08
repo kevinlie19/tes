@@ -30,16 +30,20 @@ export default function SignUpCard(props: Props) {
         placeholder="Email"
         onChangeText={onChangeTextEmail}
         newContainerStyle={styles.textinputContainer}
+        autoFocus={true}
+        autoCapitalize={'none'}
       />
       <TextInput
         placeholder="Password"
         onChangeText={onChangeTextPassword}
         newContainerStyle={styles.textinputContainer}
+        autoCapitalize={'none'}
       />
       <TextInput
         placeholder="Repeat Password"
         onChangeText={onChangeTextRepeatPassword}
         newContainerStyle={styles.textinputContainer}
+        autoCapitalize={'none'}
       />
       <TextInput
         placeholder="First Name"

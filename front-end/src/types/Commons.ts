@@ -30,6 +30,14 @@ export type EventObject = {
   image: string | null;
 };
 
+export type TicketObject = {
+  id_event: string;
+  id_user: string;
+  type: string;
+  qty: number;
+  total: number;
+};
+
 export type HomeObject = {
   user: UserObject;
   events: Array<EventObject>;
