@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -54,16 +54,18 @@ export class SignUpScene extends Component<Props, SignUpSceneState> {
         <View style={styles.imageContainer}>
           <Icon name="logo" isActive={false} customStyle={styles.logo} />
         </View>
-        <View>
-          <SignUpCard
-            onChangeTextEmail={this._onChangeEmail}
-            onChangeTextPassword={this._onChangePassword}
-            onChangeTextRepeatPassword={this._onChangeRepeatPassword}
-            onChangeTextFirstName={this._onChangeFirstName}
-            onChangeTextLastName={this._onChangeLastName}
-            onPress={this._onSubmitSignUp}
-          />
-        </View>
+        <KeyboardAvoidingView behavior="padding" enabled>
+          <View>
+            <SignUpCard
+              onChangeTextEmail={this._onChangeEmail}
+              onChangeTextPassword={this._onChangePassword}
+              onChangeTextRepeatPassword={this._onChangeRepeatPassword}
+              onChangeTextFirstName={this._onChangeFirstName}
+              onChangeTextLastName={this._onChangeLastName}
+              onPress={this._onSubmitSignUp}
+            />
+          </View>
+        </KeyboardAvoidingView>
       </View>
     );
   }

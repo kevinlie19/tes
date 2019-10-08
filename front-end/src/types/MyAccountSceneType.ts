@@ -1,9 +1,12 @@
 import { UserObject, EditProfileObject } from './Commons';
 
-export type MyAccountState = UserObject;
+export type MyAccountState = {
+  accountData: UserObject;
+  isProcessing: boolean;
+};
 
 export type MyAccountAction =
-  | { type: 'ACCOUNT_REQUESTED'; authToken: string }
+  | { type: 'ACCOUNT_REQUESTED'; authToken: string; accountData: UserObject }
   | { type: 'ACCOUNT_SUCCEED'; accountData: UserObject }
   | { type: 'ACCOUNT_FAILED'; accountData: UserObject }
   | {

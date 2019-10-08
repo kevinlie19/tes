@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 
-import { Input } from 'react-native-elements';
+import { Input, InputProps } from 'react-native-elements';
 
-type Props = {
+type Props = InputProps & {
   newContainerStyle?: StyleProp<ViewStyle>;
   placeholder: string;
   value?: string;
@@ -25,8 +25,6 @@ export default function TextInput(props: Props) {
       placeholder={placeholder}
       value={value}
       onChangeText={onChangeText}
-      autoFocus={true}
-      autoCapitalize={'none'}
       autoCorrect={false}
       secureTextEntry={
         placeholder === 'Password' || placeholder === 'Repeat Password'

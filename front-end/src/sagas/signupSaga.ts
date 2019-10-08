@@ -20,10 +20,10 @@ function* signupRequest(action: SignUpAction) {
     };
     let response = yield call(fetch, url, {
       method: 'POST',
-      body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify(data),
     });
     let result = yield response.json();
 

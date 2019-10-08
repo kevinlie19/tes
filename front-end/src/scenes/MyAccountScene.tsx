@@ -193,7 +193,7 @@ let mapStateToProps = (state: RootState) => {
   let { accountState } = state;
 
   return {
-    accountData: accountState,
+    accountData: accountState.accountData,
   };
 };
 

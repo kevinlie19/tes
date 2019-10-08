@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import dateFormat from 'dateformat';
 
 import { token } from '../helpers';
-import { EventObject } from '../types/Commons';
+import { EventObject, TicketObject } from '../types/Commons';
 import { RootState } from '../types/State';
 import {
   MIDDLE_BLACK,
@@ -18,25 +18,17 @@ import { Icon, Image, Text, Button } from '../core-ui';
 
 type Props = NavigationScreenProps & {
   eventDetailData: EventObject;
+  ticketData: TicketObject;
   fetchEventDetail: (authToken: string, _navigator: any) => void;
-  fetchTicket: (
-    authToken: string,
-    ticket_type: string,
-    ticket_qty: number,
-    _navigator: any,
-  ) => void;
 };
 
-type EventDetailSceneState = {
-  countTicket: number;
-};
+type ConfirmEventDetailSceneState = {};
 
-export class EventDetailScene extends Component<Props, EventDetailSceneState> {
-  state: EventDetailSceneState = {
-    countTicket: 1,
-  };
-
-  async componentWillMount() {
+export class ConfirmEventDetailScene extends Component<
+  Props,
+  ConfirmEventDetailSceneState
+> {
+  componentDidMount() {
     this._asyncStorage();
   }
 
@@ -50,11 +42,10 @@ export class EventDetailScene extends Component<Props, EventDetailSceneState> {
   };
 
   render() {
-    let { eventDetailData } = this.props;
-    let { countTicket } = this.state;
+    let { eventDetailData, ticketData } = this.props;
 
-    let src = this.props.eventDetailData.image;
-    let listInclude: Array<String> = eventDetailData.description.split(', ');
+    let src = eventDetailData.image || '';
+    let listInclude = eventDetailData.description.split(', ');
 
     return (
       <View style={styles.container}>
@@ -115,7 +106,7 @@ export class EventDetailScene extends Component<Props, EventDetailSceneState> {
             keyExtractor={(item) => String(item)}
           />
           <Text
-            text="Buy Ticket:"
+            text="Your Ticket:"
             type="medium"
             newTextStyle={styles.textBold}
           />
@@ -125,73 +116,24 @@ export class EventDetailScene extends Component<Props, EventDetailSceneState> {
               type="medium"
               newTextStyle={styles.greyText}
             />
-            <View style={styles.iconTicketContainer}>
-              <Icon
-                name="minus"
-                customStyle={styles.icon}
-                onPress={() =>
-                  this._onPressMinus(
-                    countTicket,
-                    eventDetailData.available_seat,
-                  )
-                }
-              />
-              <Text
-                text={String(countTicket)}
-                type="medium"
-                newTextStyle={styles.countTicketText}
-              />
-              <Icon
-                name="add"
-                customStyle={styles.icon}
-                onPress={() =>
-                  this._onPressAdd(countTicket, eventDetailData.available_seat)
-                }
-              />
-            </View>
+
+            <Text
+              text={String(ticketData.qty)}
+              type="medium"
+              newTextStyle={styles.countTicketText}
+            />
           </View>
         </ScrollView>
         <View style={styles.reserveButtonContainer}>
           <Button
             buttonType="primary"
-            text="RESERVE NOW"
+            text="SHOW MY TICKET"
             newStyleText={styles.buttonText}
-            onPress={() => this._onPressReserve(countTicket, 'Regular')}
+            onPress={() => this.props.navigation.navigate('MyTicket')}
           />
         </View>
       </View>
     );
-  }
-
-  _onPressMinus(prevCount: number, available_seat: number) {
-    if (prevCount > 1 && prevCount <= available_seat) {
-      this.setState({
-        countTicket: prevCount - 1,
-      });
-    }
-  }
-
-  _onPressAdd(prevCount: number, available_seat: number) {
-    if (prevCount >= 1 && prevCount < available_seat) {
-      this.setState({
-        countTicket: prevCount + 1,
-      });
-    }
-  }
-
-  async _onPressReserve(countTicket: number, ticketType: string) {
-    let { fetchTicket } = this.props;
-    let userToken = await token.getToken();
-
-    if (userToken) {
-      await fetchTicket(
-        userToken,
-        ticketType,
-        countTicket,
-        this.props.navigation,
-      );
-      this.props.navigation.navigate('ConfirmEvent');
-    }
   }
 }
 
@@ -200,6 +142,7 @@ let mapStateToProps = (state: RootState) => {
 
   return {
     eventDetailData: eventDetailState.eventDetailData,
+    ticketData: eventDetailState.ticketData,
   };
 };
 
@@ -208,27 +151,13 @@ let mapDispatchToProps = (dispatch: Dispatch) => {
     fetchEventDetail: (authToken: string, _navigator: any) => {
       dispatch({ type: 'FETCH_EVENT_DETAIL_REQUESTED', authToken, _navigator });
     },
-    fetchTicket: (
-      authToken: string,
-      ticket_type: string,
-      ticket_qty: number,
-      _navigator: any,
-    ) => {
-      dispatch({
-        type: 'FETCH_TICKET_REQUESTED',
-        authToken,
-        ticket_type,
-        ticket_qty,
-        _navigator,
-      });
-    },
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(EventDetailScene);
+)(ConfirmEventDetailScene);
 
 const styles = StyleSheet.create({
   container: {
@@ -298,11 +227,6 @@ const styles = StyleSheet.create({
   buyTicketContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  iconTicketContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: 70,
   },
   reserveButtonContainer: {
     position: 'absolute',

@@ -13,6 +13,8 @@ import { Icon, Text, Button } from '../core-ui';
 
 type Props = NavigationScreenProps & {
   accountData: UserObject;
+  isProcessing: boolean;
+  fetchMyAccount: (authToken: string) => void;
   fetchEditProfile: (
     authToken: string,
     updateObject: EditProfileObject,
@@ -32,16 +34,18 @@ export class ConfirmUpgradeMembershipScene extends Component<
     isAvatarChanged: false,
   };
 
-  componentDidMount() {
-    let {
-      first_name,
-      last_name,
-      avatar,
-      membership,
-      gender,
-    } = this.props.accountData;
-    this.setState({ first_name, last_name, avatar, membership, gender });
+  async componentWillMount() {
+    await this._asyncStorage();
   }
+
+  _asyncStorage = async () => {
+    let { fetchMyAccount } = this.props;
+    let userToken = await token.getToken();
+
+    if (userToken) {
+      await fetchMyAccount(userToken);
+    }
+  };
 
   render() {
     return (
@@ -89,13 +93,15 @@ export class ConfirmUpgradeMembershipScene extends Component<
               />
             </View>
           </View>
-          <Button
-            buttonType="primary"
-            text="THANKS!"
-            onPress={() => this._onPressThanks()}
-            newStyleButton={styles.buttonContainer}
-            newStyleText={styles.normalText}
-          />
+          {this.props.isProcessing ? null : (
+            <Button
+              buttonType="primary"
+              text="THANKS!"
+              onPress={() => this._onPressThanks()}
+              newStyleButton={styles.buttonContainer}
+              newStyleText={styles.normalText}
+            />
+          )}
         </View>
       </View>
     );
@@ -105,9 +111,15 @@ export class ConfirmUpgradeMembershipScene extends Component<
     let { fetchEditProfile, navigation } = this.props;
     let userToken = await token.getToken();
 
+    let { first_name, last_name, avatar, gender } = this.props.accountData;
+
     this.setState(
       {
+        first_name: first_name,
+        last_name,
+        avatar,
         membership: 'Premium',
+        gender,
       },
       async () => {
         let {
@@ -141,12 +153,16 @@ let mapStateToProps = (state: RootState) => {
   let { accountState } = state;
 
   return {
-    accountData: accountState,
+    accountData: accountState.accountData,
+    isProcessing: accountState.isProcessing,
   };
 };
 
 let mapDispatchToProps = (dispatch: Dispatch) => {
   return {
+    fetchMyAccount: (authToken: string) => {
+      dispatch({ type: 'ACCOUNT_REQUESTED', authToken });
+    },
     fetchEditProfile: (authToken: string, updateObject: EditProfileObject) => {
       dispatch({
         type: 'FETCH_EDIT_PROFILE_REQUESTED',
