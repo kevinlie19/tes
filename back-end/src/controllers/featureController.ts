@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 
 import userModel from '../models/userModel';
 import eventModel from '../models/eventModel';
+import ticketModel from '../models/ticketModel';
+import forumModel from '../models/forumModel';
 import { ResponseObject } from '../types';
 import { SERVER_OK, SERVER_BAD_REQUEST } from '../constants';
 import { dataUri } from '../helpers';
@@ -214,7 +216,6 @@ async function updateEvent(req: Request, res: Response) {
     }
 
     if (req.file && isImageChange === 'true') {
-      console.log('MASUK KESINI BOSQ');
       const file = dataUri(req).content;
       return uploader
         .upload(file)
@@ -291,4 +292,194 @@ async function deleteEvent(req: Request, res: Response) {
   }
 }
 
-export default { editProfile, createEvent, getEvent, updateEvent, deleteEvent };
+async function createForum(req: Request, res: Response) {
+  try {
+    let decoded = (<any>req).decoded;
+    let { forum_name, category, description, image } = req.body;
+
+    let user = await userModel.getUserData(decoded);
+
+    let id_user = user.data.id;
+
+    if (user.data.user_role !== 'Admin') {
+      res.status(SERVER_OK).json({
+        success: false,
+        data: {},
+        message: 'Only admin can create a forum',
+      });
+      return;
+    }
+
+    if (!forum_name || !category || !description) {
+      res.status(SERVER_OK).json({
+        success: false,
+        data: {},
+        message: 'Please fill all required fields',
+      });
+      return;
+    }
+
+    image = image ? image : null;
+
+    let result = await forumModel.newForum({
+      id_user,
+      forum_name,
+      category,
+      description,
+      image,
+    });
+
+    if (result.success) {
+      res.status(SERVER_OK).json(result);
+    } else {
+      res.status(SERVER_BAD_REQUEST).json(result);
+    }
+  } catch (e) {
+    res.status(SERVER_BAD_REQUEST).json(String(e));
+  }
+}
+
+async function getForum(req: Request, res: Response) {
+  try {
+    let { id } = req.params;
+
+    let result = await forumModel.getForumById(id);
+
+    if (result.success) {
+      res.status(SERVER_OK).json(result);
+    } else {
+      res.status(SERVER_BAD_REQUEST).json(result);
+    }
+  } catch (e) {
+    res.status(SERVER_BAD_REQUEST).json(String(e));
+  }
+}
+
+async function getForumCategory(req: Request, res: Response) {
+  try {
+    let { category } = req.params;
+
+    let result = await forumModel.getForumByCategory(category);
+
+    if (result.success) {
+      res.status(SERVER_OK).json(result);
+    } else {
+      res.status(SERVER_BAD_REQUEST).json(result);
+    }
+  } catch (e) {
+    res.status(SERVER_BAD_REQUEST).json(String(e));
+  }
+}
+
+async function updateForum(req: Request, res: Response) {}
+
+async function deleteForum(req: Request, res: Response) {
+  try {
+    let decoded = (<any>req).decoded;
+    let { id } = req.params;
+
+    let user = await userModel.getUserData(decoded);
+
+    if (user.data.user_role !== 'Admin') {
+      res.status(SERVER_OK).json({
+        success: false,
+        data: {},
+        message: 'Only admin can delete a forum',
+      });
+      return;
+    }
+
+    let result = await forumModel.deleteForum(id);
+
+    if (result.success) {
+      res.status(SERVER_OK).json(result);
+    } else {
+      res.status(SERVER_BAD_REQUEST).json(result);
+    }
+  } catch (e) {
+    res.status(SERVER_BAD_REQUEST).json(String(e));
+  }
+}
+
+async function newTicket(req: Request, res: Response) {
+  try {
+    let decoded = (<any>req).decoded;
+    let { id: id_user } = decoded;
+    let { id_event, type, qty } = req.body;
+
+    let eventResult = await eventModel.getEventById(id_event);
+
+    if (eventResult.success !== true) {
+      res.status(SERVER_BAD_REQUEST).json(eventResult);
+      return;
+    }
+
+    let {
+      event_name,
+      category,
+      event_date,
+      place,
+      price,
+      description,
+      available_seat,
+      image,
+    } = eventResult.data;
+
+    available_seat -= qty;
+
+    if (available_seat < 0) {
+      res.status(SERVER_BAD_REQUEST).json({
+        success: false,
+        data: {},
+        message: 'The number of seat available is not enough',
+      });
+      return;
+    }
+
+    await eventModel.editEvent(
+      {
+        event_name,
+        category,
+        event_date,
+        place,
+        price,
+        description,
+        available_seat,
+        image,
+      },
+      id_event,
+    );
+
+    let total: number = qty * price;
+
+    let result = await ticketModel.buyTicket({
+      id_event,
+      id_user,
+      type,
+      qty,
+      total,
+    });
+
+    if (result.success) {
+      res.status(SERVER_OK).json(result);
+    } else {
+      res.status(SERVER_BAD_REQUEST).json(result);
+    }
+  } catch (e) {
+    res.status(SERVER_BAD_REQUEST).json(String(e));
+  }
+}
+
+export default {
+  editProfile,
+  createEvent,
+  getEvent,
+  updateEvent,
+  deleteEvent,
+  newTicket,
+  createForum,
+  getForum,
+  getForumCategory,
+  updateForum,
+  deleteForum,
+};
