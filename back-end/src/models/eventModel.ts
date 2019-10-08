@@ -1,5 +1,4 @@
 import { QueryResult } from 'pg';
-import moment from 'moment';
 
 import { getDB } from '../db';
 import { CreateEvent, ReqEditEventObject } from '../types';

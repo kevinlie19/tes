@@ -1,5 +1,5 @@
 export type User = {
-  _id: string;
+  _id: number;
   email: string;
   first_name: string;
   last_name: string;
@@ -29,7 +29,7 @@ export type ResponseObject = {
 };
 
 export type DecodedObject = {
-  id: string;
+  id: number;
   iat: number;
 };
 
@@ -67,8 +67,8 @@ export type ReqEditEventObject = {
   image: string | null;
 };
 
-export type event = {
-  id: string;
+export type Event = {
+  id: number;
   event_name: string;
   category: 'Workshop' | 'Seminar';
   place: string;
@@ -76,4 +76,20 @@ export type event = {
   description: string;
   available_seat: number;
   image?: string | null;
+};
+
+export type CreateForum = {
+  id_user: number;
+  forum_name: string;
+  category: 'Umum' | 'Jual' | 'Beli';
+  description: string;
+  image?: string[] | null;
+};
+
+export type BuyTicket = {
+  id_event: number;
+  id_user: number;
+  type: 'Regular';
+  qty: number;
+  total: number;
 };
