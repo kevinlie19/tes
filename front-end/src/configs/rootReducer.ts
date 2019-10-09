@@ -5,6 +5,7 @@ import signupReducer from '../reducers/signupReducer';
 import homeReducer from '../reducers/homeReducer';
 import eventDetailReducer from '../reducers/eventDetailReducer';
 import accountReducer from '../reducers/accountReducer';
+import inboxReducer from '../reducers/inboxReducer';
 
 export default combineReducers({
   signinGoogleState: welcomeReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   homeState: homeReducer,
   eventDetailState: eventDetailReducer,
   accountState: accountReducer,
+  inboxState: inboxReducer,
 });

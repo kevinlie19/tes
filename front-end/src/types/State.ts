@@ -4,6 +4,7 @@ import { SignUpState } from './SignUpSceneType';
 import { HomeState } from './HomeSceneType';
 import { EventDetailState } from './EventDetailSceneType';
 import { MyAccountState } from './MyAccountSceneType';
+import { InboxState } from './InboxSceneType';
 
 export type RootState = {
   signinGoogleState: WelcomeState;
@@ -12,4 +13,5 @@ export type RootState = {
   homeState: HomeState;
   eventDetailState: EventDetailState;
   accountState: MyAccountState;
+  inboxState: InboxState;
 };

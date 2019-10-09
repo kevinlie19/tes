@@ -16,11 +16,11 @@ const initialState: EventDetailState = {
     image: null,
   },
   ticketData: {
-    eventId: '',
-    userId: '',
-    ticket_type: '',
-    ticket_qty: 0,
-    totalPrice: 0,
+    id_event: '',
+    id_user: '',
+    type: '',
+    qty: 0,
+    total: 0,
   },
 };
 

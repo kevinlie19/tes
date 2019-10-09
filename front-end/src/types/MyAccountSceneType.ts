@@ -11,8 +11,8 @@ export type MyAccountAction =
   | { type: 'ACCOUNT_FAILED'; accountData: UserObject }
   | {
       type: 'FETCH_EDIT_PROFILE_REQUESTED';
-      updateObject: EditProfileObject;
       authToken: string;
+      updateObject: EditProfileObject;
     }
   | {
       type: 'FETCH_EDIT_PROFILE_SUCCEED';
