@@ -38,6 +38,14 @@ export type TicketObject = {
   total: number;
 };
 
+export type InboxObject = [
+  {
+    id: string;
+    message: string;
+    inbox_date: string;
+  },
+];
+
 export type HomeObject = {
   user: UserObject;
   events: Array<EventObject>;

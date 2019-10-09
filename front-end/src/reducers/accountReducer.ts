@@ -24,9 +24,10 @@ export default function accountReducer(
     }
     case 'ACCOUNT_SUCCEED': {
       return {
+        ...accountState,
         accountData: action.accountData,
         isProcessing: false,
-      } as MyAccountState;
+      };
     }
     case 'ACCOUNT_FAILED': {
       return {
@@ -37,6 +38,7 @@ export default function accountReducer(
     case 'FETCH_EDIT_PROFILE_SUCCEED': {
       return {
         ...action.updateObject,
+        accountData: action.updateObject,
         isProcessing: false,
       };
     }

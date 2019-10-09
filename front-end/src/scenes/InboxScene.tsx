@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  RefreshControl,
-} from 'react-native';
-import { NavigationScreenProps, ScrollView } from 'react-navigation';
+import { StyleSheet, View, TouchableOpacity, FlatList } from 'react-native';
+import { NavigationScreenProps } from 'react-navigation';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import dateFormat from 'dateformat';
 
 import { Icon, Text } from '../core-ui';
+import { InboxList } from '../components';
 import {
   CUSTOM_BLACK,
   CUSTOM_YELLOW,
@@ -15,20 +14,40 @@ import {
   WHITE,
 } from '../constants/color';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
-import { InboxList } from '../components';
+import { RootState } from '../types/State';
+import { InboxObject } from '../types/Commons';
+import { token } from '../helpers';
 
-type Props = NavigationScreenProps & {};
+type Props = NavigationScreenProps & {
+  inboxData: InboxObject;
+  fetchInbox: (authToken: string) => void;
+};
 
 type InboxSceneState = {
   isRefresh: boolean;
 };
 
-export default class InboxScene extends Component<Props, InboxSceneState> {
+export class InboxScene extends Component<Props, InboxSceneState> {
   state: InboxSceneState = {
     isRefresh: false,
   };
 
+  async componentDidMount() {
+    this._asyncStorage();
+  }
+
+  _asyncStorage = async () => {
+    let { fetchInbox } = this.props;
+    let userToken = await token.getToken();
+
+    if (userToken) {
+      await fetchInbox(userToken);
+    }
+  };
+
   render() {
+    let { inboxData } = this.props;
+
     return (
       <View style={styles.container}>
         <View style={styles.navbar}>
@@ -46,27 +65,22 @@ export default class InboxScene extends Component<Props, InboxSceneState> {
         </View>
 
         <View style={styles.body}>
-          <ScrollView
+          <FlatList
             style={styles.inboxList}
-            indicatorStyle="white"
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.isRefresh}
-                onRefresh={this._onRefresh}
-              />
-            }
-          >
-            <InboxList
-              date="26 Juli 2019"
-              inboxTitle="Your e-ticket for Talkshow Motivasi Kaya has been issued!"
-              onPress={() => {}}
-            />
-            <InboxList
-              date="26 Juli 2019"
-              inboxTitle="You are now a premium member!"
-              onPress={() => {}}
-            />
-          </ScrollView>
+            onRefresh={this._onRefresh}
+            refreshing={this.state.isRefresh}
+            data={inboxData}
+            extraData={this.state}
+            renderItem={({ item }) => {
+              return (
+                <InboxList
+                  date={dateFormat(item.inbox_date, 'dd mmmm yyyy')}
+                  inboxTitle={item.message}
+                />
+              );
+            }}
+            keyExtractor={(index, item) => item.toString()}
+          />
         </View>
 
         <View style={styles.tabsContainer}>
@@ -125,6 +139,27 @@ export default class InboxScene extends Component<Props, InboxSceneState> {
     }, 1000);
   };
 }
+
+let mapStateToProps = (state: RootState) => {
+  let { inboxState } = state;
+
+  return {
+    inboxData: inboxState.inboxData,
+  };
+};
+
+let mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    fetchInbox: (authToken: string) => {
+      dispatch({ type: 'INBOX_REQUESTED', authToken });
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(InboxScene);
 
 const styles = StyleSheet.create({
   container: {

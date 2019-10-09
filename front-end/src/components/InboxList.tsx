@@ -2,12 +2,12 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { Text } from '../core-ui';
-import { LIGHT_GREY, CUSTOM_WHITE } from '../constants/color';
+import { LIGHT_GREY, CUSTOM_WHITE, DARK_GREY } from '../constants/color';
 
 type Props = {
   date: string;
   inboxTitle: string;
-  onPress: () => void;
+  onPress?: () => void;
 };
 
 export default function InboxList(props: Props) {
@@ -17,7 +17,11 @@ export default function InboxList(props: Props) {
     <TouchableOpacity onPress={onPress} style={styles.inboxListContainer}>
       <View>
         <Text text={date} type="xsmall" newTextStyle={styles.dateInbox} />
-        <Text text={inboxTitle} type="medium" />
+        <Text
+          text={inboxTitle}
+          type="medium"
+          newTextStyle={styles.titleInbox}
+        />
       </View>
     </TouchableOpacity>
   );
@@ -36,5 +40,8 @@ const styles = StyleSheet.create({
   dateInbox: {
     color: LIGHT_GREY,
     paddingBottom: 5,
+  },
+  titleInbox: {
+    color: DARK_GREY,
   },
 });
