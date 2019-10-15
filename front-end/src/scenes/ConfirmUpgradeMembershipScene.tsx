@@ -26,8 +26,7 @@ export class ConfirmUpgradeMembershipScene extends Component<
   EditProfileObject
 > {
   state: EditProfileObject = {
-    first_name: '',
-    last_name: '',
+    full_name: '',
     avatar: null,
     membership: 'Basic',
     gender: 'Other',
@@ -111,20 +110,18 @@ export class ConfirmUpgradeMembershipScene extends Component<
     let { fetchEditProfile, navigation } = this.props;
     let userToken = await token.getToken();
 
-    let { first_name, last_name, avatar, gender } = this.props.accountData;
+    let { full_name, avatar, gender } = this.props.accountData;
 
     this.setState(
       {
-        first_name: first_name,
-        last_name,
+        full_name,
         avatar,
         membership: 'Premium',
         gender,
       },
       async () => {
         let {
-          first_name,
-          last_name,
+          full_name,
           avatar,
           membership,
           gender,
@@ -132,8 +129,7 @@ export class ConfirmUpgradeMembershipScene extends Component<
         } = this.state;
 
         let updateObject = {
-          first_name,
-          last_name,
+          full_name,
           avatar,
           membership,
           gender,

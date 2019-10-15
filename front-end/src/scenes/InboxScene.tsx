@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, FlatList } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
+
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import dateFormat from 'dateformat';
@@ -76,6 +77,7 @@ export class InboxScene extends Component<Props, InboxSceneState> {
                 <InboxList
                   date={dateFormat(item.inbox_date, 'dd mmmm yyyy')}
                   inboxTitle={item.message}
+                  onRightPress={() => alert('pressed right!')}
                 />
               );
             }}
@@ -194,7 +196,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
   },
   inboxList: {
-    paddingTop: 24,
+    marginTop: 24,
   },
   tabsContainer: {
     flexDirection: 'row',

@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
   banner: {
     width: 328,
     height: 100,
+    // borderRadius: 20,
   },
   xLarge: {
     width: '100%',

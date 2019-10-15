@@ -5,21 +5,19 @@ import { Text, Button, TextInput } from '../core-ui';
 import { WHITE } from '../constants/color';
 
 type Props = {
+  onChangeTextFullname: (text: string) => void;
   onChangeTextEmail: (text: string) => void;
   onChangeTextPassword: (text: string) => void;
   onChangeTextRepeatPassword: (text: string) => void;
-  onChangeTextFirstName: (text: string) => void;
-  onChangeTextLastName: (text: string) => void;
   onPress: () => void;
 };
 
 export default function SignUpCard(props: Props) {
   let {
+    onChangeTextFullname,
     onChangeTextEmail,
     onChangeTextPassword,
     onChangeTextRepeatPassword,
-    onChangeTextFirstName,
-    onChangeTextLastName,
     onPress,
   } = props;
 
@@ -27,10 +25,16 @@ export default function SignUpCard(props: Props) {
     <View style={styles.cardContainer}>
       <Text type="large" text="Sign Up" newTextStyle={styles.title} />
       <TextInput
+        placeholder="Fullname"
+        onChangeText={onChangeTextFullname}
+        newContainerStyle={styles.textinputContainer}
+        autoFocus={true}
+        autoCapitalize={'words'}
+      />
+      <TextInput
         placeholder="Email"
         onChangeText={onChangeTextEmail}
         newContainerStyle={styles.textinputContainer}
-        autoFocus={true}
         autoCapitalize={'none'}
       />
       <TextInput
@@ -44,16 +48,6 @@ export default function SignUpCard(props: Props) {
         onChangeText={onChangeTextRepeatPassword}
         newContainerStyle={styles.textinputContainer}
         autoCapitalize={'none'}
-      />
-      <TextInput
-        placeholder="First Name"
-        onChangeText={onChangeTextFirstName}
-        newContainerStyle={styles.textinputContainer}
-      />
-      <TextInput
-        placeholder="Last Name"
-        onChangeText={onChangeTextLastName}
-        newContainerStyle={styles.textinputContainer}
       />
       <Button
         buttonType="secondary"
