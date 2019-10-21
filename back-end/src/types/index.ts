@@ -1,7 +1,8 @@
 export type User = {
   _id: number;
   email: string;
-  full_name: string;
+  first_name: string;
+  last_name: string;
   membership: 'Basic' | 'Premium';
   avatar: string | null;
   gender: 'Male' | 'Female' | 'Other';
@@ -10,7 +11,8 @@ export type User = {
 export type UserSignUp = {
   email: string;
   user_role: Role;
-  full_name: string;
+  first_name: string;
+  last_name: string;
   password: string;
 };
 
@@ -34,7 +36,8 @@ export type DecodedObject = {
 export type Role = 'Admin' | 'User';
 
 export type ReqEditProfileObject = {
-  full_name: string;
+  first_name: string;
+  last_name: string;
   isAvatarChange?: boolean;
   image: string | null;
   membership: 'Basic' | 'Premium';
@@ -89,23 +92,4 @@ export type BuyTicket = {
   type: 'Regular';
   qty: number;
   total: number;
-};
-
-export type newComment = {
-  id_forum: number;
-  id_user: number;
-  comment: string;
-};
-
-export type updateComment = {
-  id_forum: number;
-  comment: string;
-  likes: number;
-};
-
-export type UpdateForum = {
-  forum_name: string;
-  category: 'Umum' | 'Jual' | 'Beli';
-  description: string;
-  image?: string[] | null;
 };

@@ -1,55 +1,21 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  StyleProp,
-  ViewStyle,
-  TouchableOpacity,
-} from 'react-native';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
-import Animated from 'react-native-reanimated';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { Text } from '../core-ui';
-import {
-  LIGHT_GREY,
-  CUSTOM_WHITE,
-  DARK_GREY,
-  CUSTOM_RED,
-  WHITE,
-} from '../constants/color';
+import { LIGHT_GREY, CUSTOM_WHITE, DARK_GREY } from '../constants/color';
 
 type Props = {
-  newContainerStyle?: StyleProp<ViewStyle>;
   date: string;
   inboxTitle: string;
-  onRightPress: () => void;
+  onPress?: () => void;
 };
 
 export default function InboxList(props: Props) {
-  let { newContainerStyle, date, inboxTitle, onRightPress } = props;
-
-  // @ts-ignore
-  const RightActions = ({ progress, dragX, onPress }) => {
-    return (
-      <TouchableOpacity onPress={onPress}>
-        <View style={styles.rightAction}>
-          <Animated.Text style={styles.actionText}>Delete</Animated.Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+  let { date, inboxTitle, onPress } = props;
 
   return (
-    <Swipeable
-      renderRightActions={(progress, dragX) => (
-        <RightActions
-          progress={progress}
-          dragX={dragX}
-          onPress={onRightPress}
-        />
-      )}
-    >
-      <View style={[styles.inboxListContainer, newContainerStyle]}>
+    <TouchableOpacity onPress={onPress} style={styles.inboxListContainer}>
+      <View>
         <Text text={date} type="xsmall" newTextStyle={styles.dateInbox} />
         <Text
           text={inboxTitle}
@@ -57,7 +23,7 @@ export default function InboxList(props: Props) {
           newTextStyle={styles.titleInbox}
         />
       </View>
-    </Swipeable>
+    </TouchableOpacity>
   );
 }
 
@@ -77,15 +43,5 @@ const styles = StyleSheet.create({
   },
   titleInbox: {
     color: DARK_GREY,
-  },
-  rightAction: {
-    backgroundColor: CUSTOM_RED,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-  },
-  actionText: {
-    color: WHITE,
-    fontWeight: '600',
-    padding: 20,
   },
 });

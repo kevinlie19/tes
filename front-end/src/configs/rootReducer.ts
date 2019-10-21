@@ -12,7 +12,6 @@ export default combineReducers({
   signinState: signinReducer,
   signupState: signupReducer,
   homeState: homeReducer,
-  // forumState: forumReducer,
   eventDetailState: eventDetailReducer,
   accountState: accountReducer,
   inboxState: inboxReducer,

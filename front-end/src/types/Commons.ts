@@ -2,14 +2,16 @@ export type UserObject = {
   id: string;
   email: string;
   user_role: 'User' | 'Admin';
-  full_name: string;
+  first_name: string;
+  last_name: string;
   avatar: string | null;
   membership: 'Basic' | 'Premium';
   gender: 'Male' | 'Female' | 'Other';
 };
 
 export type EditProfileObject = {
-  full_name: string;
+  first_name: string;
+  last_name: string;
   avatar: string | null;
   membership: 'Basic' | 'Premium';
   gender: 'Male' | 'Female' | 'Other';
@@ -35,8 +37,6 @@ export type TicketObject = {
   qty: number;
   total: number;
 };
-
-// export type ForumObject = {};
 
 export type InboxObject = [
   {

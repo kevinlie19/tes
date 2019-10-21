@@ -18,6 +18,7 @@ function* fetchInbox(action: InboxAction) {
       },
     });
     let result = yield response.json();
+
     if (result.success) {
       let data = result.data;
       yield put({

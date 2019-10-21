@@ -14,7 +14,6 @@ const rootSaga: Saga = function*() {
   yield fork(signinSagaWatcher);
   yield fork(signupSagaWatcher);
   yield fork(homeSagaWatcher);
-  // yield fork(forumSagaWatcher);
   yield fork(eventDetailSagaWatcher);
   yield fork(accountSagaWatcher);
   yield fork(inboxSagaWatcher);
