@@ -29,7 +29,10 @@ featureRouter.post(
   middleware.multerUploads,
   featureController.createForum,
 );
-featureRouter.get('/get-forums', featureController.getAllForums);
+featureRouter.get(
+  '/get-forum-category/:category',
+  featureController.getForumCategory,
+);
 featureRouter.get('/get-forum/:id', featureController.getForum);
 featureRouter.post(
   '/update-forum/:id',
@@ -38,14 +41,8 @@ featureRouter.post(
 );
 featureRouter.get('/delete-forum/:id', featureController.deleteForum);
 
-featureRouter.post('/add-comment', featureController.newComments);
-featureRouter.post('/edit-comment', featureController.editComments);
-featureRouter.get('/get-comment/:id', featureController.getComments);
-
 featureRouter.post('/new-ticket', featureController.newTicket);
-featureRouter.get('/get-ticket', featureController.getTicketById);
 
 featureRouter.get('/inbox', featureController.inboxMessage);
-featureRouter.get('/delete-inbox/:id', featureController.deleteInbox);
 
 export default featureRouter;

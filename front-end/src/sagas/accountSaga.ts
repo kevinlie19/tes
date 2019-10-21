@@ -20,6 +20,7 @@ function* fetchMyAccount(action: MyAccountAction) {
       },
     });
     let result = yield response.json();
+
     if (result.success) {
       let data = result.data;
       yield put({
@@ -40,7 +41,8 @@ function* fetchEditProfile(action: MyAccountAction) {
     let { authToken, updateObject } = action;
 
     let {
-      full_name,
+      first_name,
+      last_name,
       avatar,
       membership,
       gender,
@@ -51,14 +53,14 @@ function* fetchEditProfile(action: MyAccountAction) {
     if (avatar) {
       let uri = Platform.OS === 'ios' ? avatar.replace('file://', '') : avatar;
       newData.append('image', {
-        // @ts-ignore
         uri,
         name: 'Photo',
         type: 'image/jpg',
       });
     }
     newData.append('isAvatarChange', String(isAvatarChanged));
-    newData.append('full_name', full_name);
+    newData.append('first_name', first_name);
+    newData.append('last_name', last_name);
     newData.append('membership', membership);
     newData.append('gender', gender);
 
