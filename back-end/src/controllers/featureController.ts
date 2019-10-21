@@ -413,11 +413,9 @@ async function getForum(req: Request, res: Response) {
   }
 }
 
-async function getForumCategory(req: Request, res: Response) {
+async function getAllForums(req: Request, res: Response) {
   try {
-    let { category } = req.params;
-
-    let result = await forumModel.getForumByCategory(category);
+    let result = await forumModel.getCategorizedForum();
 
     if (result.success) {
       res.status(SERVER_OK).json(result);
@@ -429,7 +427,57 @@ async function getForumCategory(req: Request, res: Response) {
   }
 }
 
-async function updateForum(req: Request, res: Response) {}
+async function updateForum(req: Request, res: Response) {
+  try {
+    let decoded = (<any>req).decoded;
+
+    let id = req.params.id;
+
+    let {
+      forum_name,
+      category,
+      description,
+      image,
+    } = req.body;
+
+    let user = await userModel.getUserData(decoded);
+
+    if (user.data.user_role !== 'Admin') {
+      res.status(SERVER_OK).json({
+        success: false,
+        data: {},
+        message: 'Only admin can update a forum',
+      });
+      return;
+    }
+
+    if (!forum_name || !category || !description) {
+      res.status(SERVER_OK).json({
+        success: false,
+        data: {},
+        message: 'Please fill all required fields',
+      });
+      return;
+    }
+
+    image = image ? image : null;
+
+    let result = await forumModel.updateForum({
+      forum_name,
+      category,
+      description,
+      image,
+    }, id);
+
+    if (result.success) {
+      res.status(SERVER_OK).json(result);
+    } else {
+      res.status(SERVER_BAD_REQUEST).json(result);
+    }
+  } catch (e) {
+    res.status(SERVER_BAD_REQUEST).json(String(e));
+  }
+}
 
 async function deleteForum(req: Request, res: Response) {
   try {
@@ -627,12 +675,48 @@ async function newTicket(req: Request, res: Response) {
   }
 }
 
+async function getTicketById(req: Request, res: Response) {
+  try {
+    let decoded = (<any>req).decoded;
+    let { id: id_user } = decoded;
+
+    let result = await ticketModel.getUserTicket(id_user);
+
+    if (result.success) {
+      res.status(SERVER_OK).json(result);
+    } else {
+      res.status(SERVER_BAD_REQUEST).json(result);
+    }
+  } catch (e) {
+    res.status(SERVER_BAD_REQUEST).json(String(e));
+  }
+}
+
 async function inboxMessage(req: Request, res: Response) {
   try {
     let decoded = (<any>req).decoded;
     let { id: id_user } = decoded;
 
     let result = await inboxModel.getInbox(id_user);
+
+    if (result.success) {
+      res.status(SERVER_OK).json(result);
+    } else {
+      res.status(SERVER_BAD_REQUEST).json(result);
+    }
+  } catch (e) {
+    res.status(SERVER_BAD_REQUEST).json(String(e));
+  }
+}
+
+async function deleteInbox(req: Request, res: Response) {
+  try {
+    let decoded = (<any>req).decoded;
+    let { id: id_user } = decoded;
+
+    let { id: id_inbox } = req.params;
+
+    let result = await inboxModel.deleteInbox(Number(id_inbox), id_user);
 
     if (result.success) {
       res.status(SERVER_OK).json(result);
@@ -652,12 +736,14 @@ export default {
   deleteEvent,
   createForum,
   getForum,
-  getForumCategory,
+  getAllForums,
   updateForum,
   deleteForum,
   newComments,
   editComments,
   getComments,
   newTicket,
+  getTicketById,
   inboxMessage,
+  deleteInbox,
 };
