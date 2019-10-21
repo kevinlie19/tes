@@ -145,7 +145,12 @@ export class HomeScene extends Component<Props, HomeSceneState> {
               </View>
 
               <View style={styles.menuContainer}>
-                <TouchableOpacity style={styles.menus}>
+                <TouchableOpacity
+                  style={styles.menus}
+                  onPress={() =>
+                    this.props.navigation.navigate('Forum', { from: 'Forum' })
+                  }
+                >
                   <Icon name="forum" />
                   <Text text="Forum" type="medium" />
                 </TouchableOpacity>
@@ -168,7 +173,10 @@ export class HomeScene extends Component<Props, HomeSceneState> {
                   onPress={
                     homeData.user.membership !== 'Premium'
                       ? () => this.props.navigation.navigate('Home')
-                      : () => {}
+                      : () =>
+                          this.props.navigation.navigate('Forum', {
+                            from: 'Market',
+                          })
                   }
                 >
                   <Icon

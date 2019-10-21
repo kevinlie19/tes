@@ -76,7 +76,6 @@ export class EventScene extends Component<Props, EventSceneState> {
 
     return homeData ? (
       <FlatList
-        style={styles.events}
         onRefresh={this._onRefresh}
         refreshing={this.state.isRefresh}
         data={homeData.events}
@@ -171,8 +170,5 @@ const styles = StyleSheet.create({
   textContainer: {
     marginHorizontal: 16,
     marginBottom: 16,
-  },
-  events: {
-    // marginVertical: 50,
   },
 });

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, FlatList } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
+
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import dateFormat from 'dateformat';
@@ -21,6 +22,7 @@ import { token } from '../helpers';
 type Props = NavigationScreenProps & {
   inboxData: InboxObject;
   fetchInbox: (authToken: string) => void;
+  fetchDeleteInbox: (authToken: string, inboxId: string) => void;
 };
 
 type InboxSceneState = {
@@ -76,6 +78,7 @@ export class InboxScene extends Component<Props, InboxSceneState> {
                 <InboxList
                   date={dateFormat(item.inbox_date, 'dd mmmm yyyy')}
                   inboxTitle={item.message}
+                  onRightPress={() => this._onPressDelete(item.id)}
                 />
               );
             }}
@@ -138,6 +141,15 @@ export class InboxScene extends Component<Props, InboxSceneState> {
       this.setState({ isRefresh: false });
     }, 1000);
   };
+
+  async _onPressDelete(inboxId: string) {
+    let { fetchDeleteInbox } = this.props;
+    let userToken = await token.getToken();
+
+    if (userToken) {
+      await fetchDeleteInbox(userToken, inboxId);
+    }
+  }
 }
 
 let mapStateToProps = (state: RootState) => {
@@ -152,6 +164,9 @@ let mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     fetchInbox: (authToken: string) => {
       dispatch({ type: 'INBOX_REQUESTED', authToken });
+    },
+    fetchDeleteInbox: (authToken: string, inboxId: string) => {
+      dispatch({ type: 'DELETE_INBOX_REQUESTED', authToken, inboxId });
     },
   };
 };
@@ -194,7 +209,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
   },
   inboxList: {
-    paddingTop: 24,
+    marginTop: 24,
   },
   tabsContainer: {
     flexDirection: 'row',
