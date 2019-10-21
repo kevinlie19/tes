@@ -15,8 +15,7 @@ type Props = NavigationScreenProps & {
   submitSignUp: (
     email: string,
     password: string,
-    first_name: string,
-    last_name: string,
+    full_name: string,
     _navigator: any,
   ) => void;
   reset_error: () => void;
@@ -26,8 +25,7 @@ type SignUpSceneState = {
   email: string;
   password: string;
   repeatPassword: string;
-  first_name: string;
-  last_name: string;
+  full_name: string;
 };
 
 export class SignUpScene extends Component<Props, SignUpSceneState> {
@@ -35,8 +33,7 @@ export class SignUpScene extends Component<Props, SignUpSceneState> {
     email: '',
     password: '',
     repeatPassword: '',
-    first_name: '',
-    last_name: '',
+    full_name: '',
   };
 
   componentDidUpdate() {
@@ -57,11 +54,10 @@ export class SignUpScene extends Component<Props, SignUpSceneState> {
         <KeyboardAvoidingView behavior="padding" enabled>
           <View>
             <SignUpCard
+              onChangeTextFullname={this._onChangeFullname}
               onChangeTextEmail={this._onChangeEmail}
               onChangeTextPassword={this._onChangePassword}
               onChangeTextRepeatPassword={this._onChangeRepeatPassword}
-              onChangeTextFirstName={this._onChangeFirstName}
-              onChangeTextLastName={this._onChangeLastName}
               onPress={this._onSubmitSignUp}
             />
           </View>
@@ -69,6 +65,12 @@ export class SignUpScene extends Component<Props, SignUpSceneState> {
       </View>
     );
   }
+
+  _onChangeFullname = (newFullname: string) => {
+    this.setState({
+      full_name: newFullname,
+    });
+  };
 
   _onChangeEmail = (newEmail: string) => {
     this.setState({
@@ -88,20 +90,8 @@ export class SignUpScene extends Component<Props, SignUpSceneState> {
     });
   };
 
-  _onChangeFirstName = (newFirstName: string) => {
-    this.setState({
-      first_name: newFirstName,
-    });
-  };
-
-  _onChangeLastName = (newLastName: string) => {
-    this.setState({
-      last_name: newLastName,
-    });
-  };
-
   _onSubmitSignUp = () => {
-    let { email, password, repeatPassword, first_name, last_name } = this.state;
+    let { email, password, repeatPassword, full_name } = this.state;
     let { submitSignUp } = this.props;
 
     let _navigator: any = this.props.navigation;
@@ -112,11 +102,11 @@ export class SignUpScene extends Component<Props, SignUpSceneState> {
       email &&
       password
     ) {
-      submitSignUp(email, password, first_name, last_name, _navigator);
+      submitSignUp(email, password, full_name, _navigator);
     } else if (password.length < 6 || password !== repeatPassword) {
       alert('Please fill the password correctly.');
     } else {
-      submitSignUp(email, password, first_name, last_name, _navigator);
+      submitSignUp(email, password, full_name, _navigator);
     }
   };
 }
@@ -134,16 +124,14 @@ let mapDispatchToProps = (dispatch: Dispatch) => {
     submitSignUp: (
       email: string,
       password: string,
-      first_name: string,
-      last_name: string,
+      full_name: string,
       _navigator: any,
     ) => {
       dispatch({
         type: 'SIGNUP_REQUESTED',
         email,
         password,
-        first_name,
-        last_name,
+        full_name,
         _navigator,
       });
     },

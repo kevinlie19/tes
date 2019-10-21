@@ -10,13 +10,12 @@ export default function* signupSagaWatcher(): any {
 
 function* signupRequest(action: SignUpAction) {
   if (action.type === 'SIGNUP_REQUESTED') {
-    let { email, password, first_name, last_name, _navigator } = action;
+    let { email, password, full_name, _navigator } = action;
     let url = `${API_HOST}/api/auth/sign-up`;
     let data = {
       email,
       password,
-      first_name,
-      last_name,
+      full_name,
     };
     let response = yield call(fetch, url, {
       method: 'POST',

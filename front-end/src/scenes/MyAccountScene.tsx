@@ -43,8 +43,6 @@ export class MyAccountScene extends Component<Props, MyAccountSceneState> {
   render() {
     let { accountData } = this.props;
 
-    let fullName = accountData.first_name + ' ' + accountData.last_name;
-
     return (
       <View style={styles.container}>
         <View style={styles.navbar}>
@@ -65,7 +63,7 @@ export class MyAccountScene extends Component<Props, MyAccountSceneState> {
           <View style={styles.infoContainer}>
             <Avatar src={accountData.avatar} />
             <View style={styles.textContainer}>
-              <Text text={fullName} type="large" />
+              <Text text={accountData.full_name} type="large" />
               <View style={styles.smallTextContainer}>
                 <Text
                   text="Entrepreneur"
