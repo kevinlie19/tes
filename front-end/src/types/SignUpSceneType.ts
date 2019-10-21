@@ -9,10 +9,8 @@ export type SignUpAction =
   | {
       type: 'SIGNUP_REQUESTED';
       email: string;
-      username: string;
+      full_name: string;
       password: string;
-      first_name: string;
-      last_name: string;
       _navigator: NavigationContainerComponent;
     }
   | { type: 'SIGNUP_FAILED'; message: string }

@@ -2,16 +2,14 @@ export type UserObject = {
   id: string;
   email: string;
   user_role: 'User' | 'Admin';
-  first_name: string;
-  last_name: string;
+  full_name: string;
   avatar: string | null;
   membership: 'Basic' | 'Premium';
   gender: 'Male' | 'Female' | 'Other';
 };
 
 export type EditProfileObject = {
-  first_name: string;
-  last_name: string;
+  full_name: string;
   avatar: string | null;
   membership: 'Basic' | 'Premium';
   gender: 'Male' | 'Female' | 'Other';
@@ -36,6 +34,24 @@ export type TicketObject = {
   type: string;
   qty: number;
   total: number;
+};
+
+type ForumObject = {
+  id: string;
+  id_user: string;
+  forum_name: string;
+  category: 'Umum' | 'Jual' | 'Beli';
+  description: string;
+  image: string | null;
+  likes: number;
+  cdate: string;
+  udate: string;
+};
+
+export type AllForumObject = {
+  umum: Array<ForumObject>;
+  jual: Array<ForumObject>;
+  beli: Array<ForumObject>;
 };
 
 export type InboxObject = [
