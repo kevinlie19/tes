@@ -2,13 +2,13 @@ import React from 'react';
 import {
   StyleSheet,
   StyleProp,
-  ViewStyle,
   ActivityIndicator,
+  ImageStyle,
 } from 'react-native';
 import { Image as Picture } from 'react-native-elements';
 
 type Props = {
-  newAvatarStyle?: StyleProp<ViewStyle>;
+  newAvatarStyle?: StyleProp<ImageStyle>;
   src?: string | null;
 };
 
@@ -18,16 +18,14 @@ export default function Avatar(props: Props) {
   return src && src !== null ? (
     <Picture
       source={{ uri: src }}
-      style={styles.avatarDefault}
+      style={[styles.avatarDefault, newAvatarStyle]}
       PlaceholderContent={<ActivityIndicator />}
-      containerStyle={newAvatarStyle}
     />
   ) : (
     <Picture
       source={require('../../assets/images/avatarDefault.png')}
-      style={styles.avatarDefault}
+      style={[styles.avatarDefault, newAvatarStyle]}
       PlaceholderContent={<ActivityIndicator />}
-      containerStyle={newAvatarStyle}
     />
   );
 }

@@ -202,8 +202,8 @@ export class HomeScene extends Component<Props, HomeSceneState> {
                 {this._renderHome()}
               </View>
 
-              <View style={styles.latestNewsContainer}>
-                <Text text="Latest News" type="large" />
+              <View style={styles.latestForumContainer}>
+                <Text text="Latest Forum" type="large" />
                 <View></View>
               </View>
             </View>
@@ -436,7 +436,7 @@ const styles = StyleSheet.create({
   events: {
     paddingTop: 15,
   },
-  latestNewsContainer: {
+  latestForumContainer: {
     marginBottom: 24,
     marginHorizontal: 16,
   },

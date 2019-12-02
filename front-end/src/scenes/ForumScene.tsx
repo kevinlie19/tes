@@ -72,6 +72,11 @@ export class ForumScene extends Component<Props, ForumSceneState> {
                       forumTitle={item.forum_name}
                       starter="Lia Eden"
                       comments={1296}
+                      onPress={() =>
+                        this.props.navigation.navigate('ForumDetail', {
+                          id: item.id,
+                        })
+                      }
                     />
                   );
                 }}
@@ -106,6 +111,11 @@ export class ForumScene extends Component<Props, ForumSceneState> {
                       forumTitle={item.forum_name}
                       starter="Lia Eden"
                       comments={1296}
+                      onPress={() =>
+                        this.props.navigation.navigate('ForumDetail', {
+                          id: item.id,
+                        })
+                      }
                     />
                   );
                 }}
@@ -140,6 +150,11 @@ export class ForumScene extends Component<Props, ForumSceneState> {
                       forumTitle={item.forum_name}
                       starter="Lia Eden"
                       comments={1296}
+                      onPress={() =>
+                        this.props.navigation.navigate('ForumDetail', {
+                          id: item.id,
+                        })
+                      }
                     />
                   );
                 }}

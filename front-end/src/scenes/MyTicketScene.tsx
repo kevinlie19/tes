@@ -48,8 +48,6 @@ export class MyTicketScene extends Component<Props, MyTicketSceneState> {
   render() {
     let { eventDetailData, accountData } = this.props;
 
-    let fullName = accountData.first_name + ' ' + accountData.last_name;
-
     return (
       <View style={styles.container}>
         <View style={styles.navbar}>
@@ -104,7 +102,7 @@ export class MyTicketScene extends Component<Props, MyTicketSceneState> {
               newTextStyle={styles.boldText}
             />
             <Text
-              text={`Attendant: ${fullName}`}
+              text={`Attendant: ${accountData.full_name}`}
               type="medium"
               newTextStyle={styles.greyText}
             />

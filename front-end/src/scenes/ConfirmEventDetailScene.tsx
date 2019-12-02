@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { NavigationScreenProps, FlatList, ScrollView } from 'react-navigation';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+} from 'react-native';
+import { NavigationScreenProps } from 'react-navigation';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import dateFormat from 'dateformat';

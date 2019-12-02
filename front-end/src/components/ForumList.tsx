@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
     height: 54,
     alignItems: 'center',
     alignSelf: 'center',
-    // justifyContent: 'center',
     marginRight: 16,
   },
   forumIcon: {

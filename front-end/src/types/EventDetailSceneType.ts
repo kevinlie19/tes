@@ -34,4 +34,17 @@ export type EventDetailAction =
   | {
       type: 'FETCH_TICKET_FAILED';
       ticketData: TicketObject;
+    }
+  | {
+      type: 'FETCH_GET_TICKET_REQUESTED';
+      authToken: string;
+      _navigator: NavigationContainerComponent;
+    }
+  | {
+      type: 'FETCH_GET_TICKET_SUCCEED';
+      ticketData: TicketObject;
+    }
+  | {
+      type: 'FETCH_GET_TICKET_FAILED';
+      ticketData: TicketObject;
     };

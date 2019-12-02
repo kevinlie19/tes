@@ -23,6 +23,7 @@ function* signinRequest(action: SignInAction) {
       },
       body: JSON.stringify(data),
     });
+
     let result = yield response.json();
 
     if (result.success) {

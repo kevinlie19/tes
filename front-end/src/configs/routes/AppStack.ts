@@ -6,6 +6,7 @@ import UpgradeMembershipScene from '../../scenes/UpgradeMembershipScene';
 import ProceedUpgradeMembershipScene from '../../scenes/ProceedUpgradeMembershipScene';
 import ConfirmUpgradeMembershipScene from '../../scenes/ConfirmUpgradeMembershipScene';
 import ForumScene from '../../scenes/ForumScene';
+import ForumDetailScene from '../../scenes/ForumDetailScene';
 import EventScene from '../../scenes/EventScene';
 import EventDetailScene from '../../scenes/EventDetailScene';
 import ConfirmEventDetailScene from '../../scenes/ConfirmEventDetailScene';
@@ -38,6 +39,10 @@ const AppStack = createStackNavigator({
   },
   Forum: {
     screen: ForumScene,
+    navigationOptions: { header: null },
+  },
+  ForumDetail: {
+    screen: ForumDetailScene,
     navigationOptions: { header: null },
   },
   Event: {
