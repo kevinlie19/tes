@@ -10,10 +10,12 @@ type Props = {
   name: string;
   date: string;
   comment: string;
+  likes: number;
+  onPressLike: () => void;
 };
 
 export default function CommentList(props: Props) {
-  let { avatar, isLiked, name, date, comment } = props;
+  let { avatar, isLiked, name, date, comment, likes, onPressLike } = props;
 
   return (
     <View style={styles.commentListContainer}>
@@ -44,10 +46,10 @@ export default function CommentList(props: Props) {
             name="heart"
             isActive={isLiked && isLiked === true ? true : false}
             customStyle={styles.smallIcon}
-            onPress={() => {}}
+            onPress={onPressLike}
           />
           <Text
-            text="172"
+            text={likes.toString()}
             type="small"
             newTextStyle={{
               marginLeft: 5,

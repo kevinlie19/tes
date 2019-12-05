@@ -42,9 +42,9 @@ export type EventDetailAction =
     }
   | {
       type: 'FETCH_GET_TICKET_SUCCEED';
-      ticketData: TicketObject;
+      ticketData: Array<TicketObject>;
     }
   | {
       type: 'FETCH_GET_TICKET_FAILED';
-      ticketData: TicketObject;
+      ticketData: Array<TicketObject>;
     };

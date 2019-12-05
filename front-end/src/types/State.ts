@@ -3,6 +3,7 @@ import { SignInState } from './SignInSceneType';
 import { SignUpState } from './SignUpSceneType';
 import { HomeState } from './HomeSceneType';
 import { ForumState } from './ForumSceneType';
+import { ForumDetailState } from './ForumDetailSceneType';
 import { EventDetailState } from './EventDetailSceneType';
 import { MyAccountState } from './MyAccountSceneType';
 import { InboxState } from './InboxSceneType';
@@ -13,6 +14,7 @@ export type RootState = {
   signupState: SignUpState;
   homeState: HomeState;
   forumState: ForumState;
+  forumDetailState: ForumDetailState;
   eventDetailState: EventDetailState;
   accountState: MyAccountState;
   inboxState: InboxState;

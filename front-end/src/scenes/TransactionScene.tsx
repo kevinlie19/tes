@@ -4,12 +4,12 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  FlatList,
+  // FlatList,
 } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import dateFormat from 'dateformat';
+// import dateFormat from 'dateformat';
 
 import { token } from '../helpers';
 import { EventObject } from '../types/Commons';
@@ -27,8 +27,8 @@ import { Icon, Text } from '../core-ui';
 import { TransactionList, TabView } from '../components';
 
 type Props = NavigationScreenProps & {
-  eventDetailData: EventObject;
-  fetchEventDetail: (authToken: string, _navigator: any) => void;
+  ticketData: EventObject;
+  fetchGetTicket: (authToken: string, _navigator: any) => void;
 };
 
 type TransactionSceneState = {
@@ -47,11 +47,11 @@ export class TransactionScene extends Component<Props, TransactionSceneState> {
   }
 
   _asyncStorage = async () => {
-    let { fetchEventDetail } = this.props;
+    let { fetchGetTicket } = this.props;
     let userToken = await token.getToken();
 
     if (userToken) {
-      await fetchEventDetail(userToken, this.props.navigation);
+      await fetchGetTicket(userToken, this.props.navigation);
     }
   };
 
@@ -59,7 +59,7 @@ export class TransactionScene extends Component<Props, TransactionSceneState> {
     {
       title: 'Ongoing',
       render: () => {
-        let { eventDetailData } = this.props;
+        let { ticketData } = this.props;
 
         return (
           <ScrollView style={styles.body}>
@@ -86,7 +86,7 @@ export class TransactionScene extends Component<Props, TransactionSceneState> {
     {
       title: 'History',
       render: () => {
-        let { eventDetailData } = this.props;
+        let { ticketData } = this.props;
 
         return (
           <ScrollView style={styles.body}>
@@ -202,7 +202,7 @@ let mapStateToProps = (state: RootState) => {
 
 let mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    fetchEventDetail: (authToken: string, _navigator: any) => {
+    fetchGetTicket: (authToken: string, _navigator: any) => {
       dispatch({ type: 'FETCH_EVENT_DETAIL_REQUESTED', authToken, _navigator });
     },
   };

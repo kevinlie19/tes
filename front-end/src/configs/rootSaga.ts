@@ -6,6 +6,7 @@ import signinSagaWatcher from '../sagas/signinSaga';
 import signupSagaWatcher from '../sagas/signupSaga';
 import homeSagaWatcher from '../sagas/homeSaga';
 import forumSagaWatcher from '../sagas/forumSaga';
+import forumDetailSagaWatcher from '../sagas/forumDetailSaga';
 import eventDetailSagaWatcher from '../sagas/eventDetailSaga';
 import accountSagaWatcher from '../sagas/accountSaga';
 import inboxSagaWatcher from '../sagas/inboxSaga';
@@ -16,6 +17,7 @@ const rootSaga: Saga = function*() {
   yield fork(signupSagaWatcher);
   yield fork(homeSagaWatcher);
   yield fork(forumSagaWatcher);
+  yield fork(forumDetailSagaWatcher);
   yield fork(eventDetailSagaWatcher);
   yield fork(accountSagaWatcher);
   yield fork(inboxSagaWatcher);

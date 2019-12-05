@@ -6,6 +6,7 @@ import {
   ScrollView,
   RefreshControl,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import { Dispatch } from 'redux';
@@ -24,13 +25,14 @@ import {
 } from '../constants/color';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
 import { Icon, Text, Image } from '../core-ui';
-import { EventList } from '../components';
+import { EventList, ForumList } from '../components';
 import { token, eventID } from '../helpers';
 import { RootState } from '../types/State';
 import { HomeObject } from '../types/Commons';
 
 type Props = NavigationScreenProps & {
   homeData: HomeObject;
+  isLoading: boolean;
   fetchHome: (authToken: string, _navigator: any) => void;
 };
 
@@ -42,6 +44,10 @@ export class HomeScene extends Component<Props, HomeSceneState> {
   state: HomeSceneState = {
     isRefresh: false,
   };
+
+  async componentWillMount() {
+    this._asyncStorage();
+  }
 
   async componentDidMount() {
     this._asyncStorage();
@@ -148,7 +154,10 @@ export class HomeScene extends Component<Props, HomeSceneState> {
                 <TouchableOpacity
                   style={styles.menus}
                   onPress={() =>
-                    this.props.navigation.navigate('Forum', { from: 'Forum' })
+                    this.props.navigation.navigate('Forum', {
+                      from: 'Forum',
+                      membership: homeData.user.membership,
+                    })
                   }
                 >
                   <Icon name="forum" />
@@ -199,12 +208,12 @@ export class HomeScene extends Component<Props, HomeSceneState> {
 
               <View style={styles.eventContainer}>
                 <Text text="Latest Events" type="large" />
-                {this._renderHome()}
+                {this._renderLatestEvents()}
               </View>
 
               <View style={styles.latestForumContainer}>
-                <Text text="Latest Forum" type="large" />
-                <View></View>
+                <Text text="Latest Forums" type="large" />
+                {this._renderLatestForums()}
               </View>
             </View>
           </ScrollView>
@@ -263,10 +272,14 @@ export class HomeScene extends Component<Props, HomeSceneState> {
     );
   }
 
-  _renderHome = () => {
-    let { homeData } = this.props;
+  _renderLatestEvents = () => {
+    let { homeData, isLoading } = this.props;
 
-    return homeData ? (
+    return isLoading ? (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="small" color={CUSTOM_YELLOW} />
+      </View>
+    ) : homeData ? (
       <FlatList
         style={styles.events}
         horizontal={true}
@@ -288,7 +301,48 @@ export class HomeScene extends Component<Props, HomeSceneState> {
         keyExtractor={(item) => item.id.toString()}
       />
     ) : (
-      <View />
+      <View>
+        <Text type="medium" text="Sorry, No Available Events Yet" />
+      </View>
+    );
+  };
+
+  _renderLatestForums = () => {
+    let { homeData, isLoading } = this.props;
+
+    return isLoading ? (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="small" color={CUSTOM_YELLOW} />
+      </View>
+    ) : homeData ? (
+      <FlatList
+        style={styles.events}
+        data={homeData.forums}
+        extraData={this.state}
+        renderItem={({ item }) => {
+          return (
+            <ForumList
+              thumbnail={item.image}
+              type="Latest"
+              category={item.category}
+              forumTitle={item.forum_name}
+              starter={item.full_name}
+              latestComment={item.latest_comment}
+              onPress={() =>
+                this.props.navigation.navigate('Forum', {
+                  from: 'Forum',
+                  membership: homeData.user.membership,
+                })
+              }
+            />
+          );
+        }}
+        keyExtractor={(item) => Math.random().toString()}
+      />
+    ) : (
+      <View>
+        <Text type="medium" text="Sorry, No Available Forums Yet" />
+      </View>
     );
   };
 
@@ -300,7 +354,7 @@ export class HomeScene extends Component<Props, HomeSceneState> {
   };
 
   async _onPressEvent(eventId: string) {
-    await eventID.saveEventID(String(eventId));
+    await eventID.saveEventID(eventId.toString());
     this.props.navigation.navigate('EventDetail');
   }
 }
@@ -310,6 +364,7 @@ let mapStateToProps = (state: RootState) => {
 
   return {
     homeData: homeState.homeData,
+    isLoading: homeState.isLoading,
   };
 };
 
@@ -437,7 +492,6 @@ const styles = StyleSheet.create({
     paddingTop: 15,
   },
   latestForumContainer: {
-    marginBottom: 24,
     marginHorizontal: 16,
   },
   tabsContainer: {
@@ -458,5 +512,10 @@ const styles = StyleSheet.create({
   },
   otherText: {
     color: CUSTOM_WHITE,
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 18,
   },
 });

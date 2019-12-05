@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { NavigationScreenProps, ScrollView } from 'react-navigation';
-// import { Dispatch } from 'redux';
-// import { connect } from 'react-redux';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  FlatList,
+  RefreshControl,
+  KeyboardAvoidingView,
+} from 'react-native';
+import { NavigationScreenProps } from 'react-navigation';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import dateFormat from 'dateformat';
 
-// import { RootState } from '../types/State';
-// import { HomeObject } from '../types/Commons';
-// import { token, eventID } from '../helpers';
+import { RootState } from '../types/State';
+import { ForumObject, CommentObject } from '../types/Commons';
+import { token } from '../helpers';
 import { Icon, Text, Image, Avatar, TextInput } from '../core-ui';
 import { CommentList } from '../components';
 import {
@@ -20,44 +28,82 @@ import {
 import { STATUS_BAR_HEIGHT, DEVICE_WIDTH } from '../constants/deviceConfig';
 
 type Props = NavigationScreenProps & {
-  // homeData: HomeObject;
-  // fetchHome: (authToken: string, _navigator: any) => void;
+  forumDetailData: ForumObject;
+  commentData: Array<CommentObject>;
+  fetchForumDetail: (
+    authToken: string,
+    detailId: number,
+    _navigator: any,
+  ) => void;
+  fetchForumDetailLike: (
+    authToken: string,
+    detailId: number,
+    _navigator: any,
+  ) => void;
+  fetchCommentLike: (
+    authToken: string,
+    detailId: number,
+    _navigator: any,
+  ) => void;
+  fetchGetComment: (
+    authToken: string,
+    detailId: number,
+    _navigator: any,
+  ) => void;
+  fetchPostComment: (
+    authToken: string,
+    detailId: number,
+    comment: string,
+    _navigator: any,
+  ) => void;
 };
 
 type ForumDetailSceneState = {
-  // isRefresh: boolean;
+  isRefresh: boolean;
+  isLikedForum: boolean;
+  likesCountForum: number;
+  comment: string;
 };
 
-export default class ForumDetailScene extends Component<
-  Props,
-  ForumDetailSceneState
-> {
-  // state: EventSceneState = {
-  //   isRefresh: false,
-  // };
+export class ForumDetailScene extends Component<Props, ForumDetailSceneState> {
+  state: ForumDetailSceneState = {
+    isRefresh: false,
+    isLikedForum: false,
+    likesCountForum: 0,
+    comment: '',
+  };
 
   async componentDidMount() {
-    // this._asyncStorage();
+    await this._asyncStorage();
   }
 
-  // _asyncStorage = async () => {
-  //   let { fetchHome } = this.props;
-  //   let userToken = await token.getToken();
-  //   let detailId = this.props.navigation.getParam('id');
+  _asyncStorage = async () => {
+    let { fetchForumDetail, fetchGetComment, forumDetailData } = this.props;
+    let userToken = await token.getToken();
+    let detailId = this.props.navigation.getParam('id');
 
-  //   if (userToken) {
-  //     await fetchHome(userToken, this.props.navigation);
-  //   }
-  // };
+    if (userToken) {
+      await fetchForumDetail(userToken, detailId, this.props.navigation);
+      await fetchGetComment(userToken, detailId, this.props.navigation);
+
+      await this.setState({
+        likesCountForum: forumDetailData.likes,
+        isLikedForum: forumDetailData.is_liked_by_you,
+      });
+    }
+  };
 
   render() {
+    let { forumDetailData } = this.props;
+    let { isLikedForum, likesCountForum, comment } = this.state;
+
     return (
       <View style={styles.container}>
         <View style={styles.navbar}>
           <View style={styles.navbarContainer}>
             <Icon
               name="arrowBack"
-              customStyle={styles.arrowBack}
+              customStyle={styles.icon}
               onPress={() => this.props.navigation.goBack()}
             />
 
@@ -70,11 +116,19 @@ export default class ForumDetailScene extends Component<
           </View>
         </View>
         <View style={styles.body}>
-          <ScrollView indicatorStyle="white" style={{ marginBottom: 48 }}>
+          <ScrollView
+            indicatorStyle="white"
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.isRefresh}
+                onRefresh={this._onRefresh}
+              />
+            }
+          >
             <View style={styles.forumDetail}>
               <View style={{ marginTop: 24, marginHorizontal: 16 }}>
                 <Text
-                  text="WTS Mesin Kopi Nescafe"
+                  text={forumDetailData.forum_name}
                   type="large"
                   newTextStyle={{ marginBottom: 18 }}
                 />
@@ -82,43 +136,38 @@ export default class ForumDetailScene extends Component<
                   <Avatar newAvatarStyle={styles.avatar} />
                   <View style={{ marginLeft: 8 }}>
                     <Text
-                      text="Lia Eden"
+                      text={forumDetailData.full_name}
                       type="small"
                       newTextStyle={{ marginBottom: 3, fontWeight: 'normal' }}
                     />
                     <Text
                       text="Learning"
                       type="xsmall"
-                      newTextStyle={{ color: GREY }}
+                      newTextStyle={styles.greyText}
                     />
                   </View>
                 </View>
                 <Text
-                  text="26 Juli 2019"
+                  text={dateFormat(forumDetailData.cdate, 'dd mmmm yyyy')}
                   type="xsmall"
                   newTextStyle={{ color: LIGHT_GREY }}
                 />
-                <ScrollView
-                  horizontal={true}
-                  style={{ flexDirection: 'row', marginTop: 9 }}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginTop: 9,
+                  }}
                 >
-                  <Image />
-                  <Image />
-                </ScrollView>
+                  <Image src={forumDetailData.image} />
+                </View>
                 <View>
                   <Text
-                    text="1850W faster heat up 15 bar. Italian made. Pump 2L water tank with filter. Dedicated hot water. Outlet 250gm on board. Grinder 18, adjustable grind settings & dosage control. Fresh beans to an espresso in under a minute. PID temperature control. Pressure gauge, Low pressure preinfusion"
+                    text={forumDetailData.description}
                     type="xsmall"
                     newTextStyle={{
                       marginTop: 16,
-                      marginBottom: 20,
                       color: MIDDLE_BLACK,
                     }}
-                  />
-                  <Text
-                    text="Harga: IDR 14.500.000"
-                    type="xsmall"
-                    newTextStyle={{ color: MIDDLE_BLACK }}
                   />
                 </View>
                 <View
@@ -131,12 +180,12 @@ export default class ForumDetailScene extends Component<
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Icon
                       name="heart"
-                      isActive={false}
+                      isActive={isLikedForum}
                       customStyle={styles.smallIcon}
-                      onPress={() => {}}
+                      onPress={this._onPressForumDetailLike}
                     />
                     <Text
-                      text="239"
+                      text={likesCountForum.toString()}
                       type="small"
                       newTextStyle={{
                         marginLeft: 5,
@@ -162,107 +211,205 @@ export default class ForumDetailScene extends Component<
                   type="medium"
                   style={{ marginVertical: 18 }}
                 />
-                <View>
-                  <CommentList
-                    name="Robert Kiyosaki"
-                    date="27 Juli 2019"
-                    comment="Mau dong, nego tapi 12 jeti"
-                    isLiked={true}
-                  />
-                  <CommentList
-                    name="Thomas Marjiono"
-                    date="27 Juli 2019"
-                    comment="Mahal betul yak"
-                    isLiked={false}
-                  />
-                </View>
+                <View>{this._renderComment()}</View>
               </View>
             </View>
           </ScrollView>
-          <View style={styles.inputComment}>
-            <Icon
-              name="attachment"
-              customStyle={{ width: 24, height: 24, marginRight: 32 }}
-            />
-            <TextInput
-              placeholder="Add a Comment"
-              newInputContainerStyle={{ borderBottomWidth: 0 }}
-            />
-            <Icon
-              name="send"
-              customStyle={{ width: 24, height: 24 }}
-              onPress={() => {}}
-            />
-          </View>
+          <KeyboardAvoidingView
+            keyboardVerticalOffset={76}
+            behavior="padding"
+            enabled
+          >
+            <View style={styles.inputComment}>
+              <Icon
+                name="attachment"
+                customStyle={{ width: 24, height: 24, marginRight: 32 }}
+              />
+              <TextInput
+                placeholder="Add a Comment"
+                newInputContainerStyle={{ borderBottomWidth: 0 }}
+                onChangeText={this._onChangeComment}
+                value={comment}
+              />
+              <Icon
+                name="send"
+                customStyle={styles.icon}
+                onPress={this._onPressSend}
+              />
+            </View>
+          </KeyboardAvoidingView>
         </View>
       </View>
     );
   }
 
-  // _renderEvents = () => {
-  //   let { homeData } = this.props;
+  _renderComment = () => {
+    let { commentData } = this.props;
 
-  //   return homeData ? (
-  //     <FlatList
-  //       onRefresh={this._onRefresh}
-  //       refreshing={this.state.isRefresh}
-  //       data={homeData.events}
-  //       extraData={this.state}
-  //       renderItem={({ item }) => {
-  //         return (
-  //           <EventList
-  //             src={item.image}
-  //             type="vertical"
-  //             category={item.category}
-  //             title={item.event_name}
-  //             date={item.event_date}
-  //             price={item.price}
-  //             onPress={() => {
-  //               this._onPressEvent(item.id);
-  //             }}
-  //           />
-  //         );
-  //       }}
-  //       keyExtractor={(item) => item.id.toString()}
-  //     />
-  //   ) : (
-  //     <View />
-  //   );
-  // };
+    return commentData.length > 0 ? (
+      <FlatList
+        data={commentData}
+        extraData={this.state}
+        renderItem={({ item }) => {
+          return (
+            <CommentList
+              name={item.full_name}
+              date={dateFormat(item.date, 'dd mmmm yyyy')}
+              comment={item.comment}
+              isLiked={item.is_liked_by_you}
+              likes={item.likes}
+              onPressLike={() => this._onPressCommentLike(item.id)}
+            />
+          );
+        }}
+        keyExtractor={(item) => item.id.toString()}
+      />
+    ) : (
+      <View style={styles.emptyComment}>
+        <Text
+          newTextStyle={styles.greyText}
+          type="large"
+          text="No Comments Yet"
+        />
+      </View>
+    );
+  };
 
-  // _onRefresh = () => {
-  //   this.setState({ isRefresh: true });
-  //   this._asyncStorage().then(() => {
-  //     this.setState({ isRefresh: false });
-  //   });
-  // };
+  _onRefresh = () => {
+    this.setState({ isRefresh: true });
+    this._asyncStorage().then(() => {
+      this.setState({ isRefresh: false });
+    });
+  };
 
-  // async _onPressEvent(eventId: string) {
-  //   await eventID.saveEventID(String(eventId));
-  //   this.props.navigation.navigate('EventDetail');
-  // }
+  _onChangeComment = (newComment: string) => {
+    this.setState({ comment: newComment });
+  };
+
+  _onPressForumDetailLike = async () => {
+    let { fetchForumDetailLike } = this.props;
+    let userToken = await token.getToken();
+    let detailId = this.props.navigation.getParam('id');
+    let { isLikedForum, likesCountForum } = this.state;
+
+    if (userToken) {
+      await fetchForumDetailLike(userToken, detailId, this.props.navigation);
+      this.setState({
+        isLikedForum: !isLikedForum,
+        likesCountForum: !isLikedForum
+          ? likesCountForum + 1
+          : likesCountForum - 1,
+      });
+
+      await this._asyncStorage();
+    }
+  };
+
+  async _onPressCommentLike(commentId: number) {
+    let { fetchCommentLike } = this.props;
+    let userToken = await token.getToken();
+
+    if (userToken) {
+      await fetchCommentLike(userToken, commentId, this.props.navigation);
+      await this._asyncStorage();
+    }
+  }
+
+  _onPressSend = async () => {
+    let { comment } = this.state;
+    let { fetchPostComment } = this.props;
+    let userToken = await token.getToken();
+    let detailId = this.props.navigation.getParam('id');
+    if (userToken) {
+      await fetchPostComment(
+        userToken,
+        detailId,
+        comment,
+        this.props.navigation,
+      );
+
+      this.setState({ comment: '' });
+      await this._asyncStorage();
+    }
+  };
 }
 
-// let mapStateToProps = (state: RootState) => {
-//   let { homeState } = state;
+let mapStateToProps = (state: RootState) => {
+  let { forumDetailState } = state;
 
-//   return {
-//     homeData: homeState.homeData,
-//   };
-// };
+  return {
+    forumDetailData: forumDetailState.forumDetailData,
+    commentData: forumDetailState.commentData,
+  };
+};
 
-// let mapDispatchToProps = (dispatch: Dispatch) => {
-//   return {
-//     fetchHome: (authToken: string, _navigator: any) => {
-//       dispatch({ type: 'FETCH_HOME_REQUESTED', authToken, _navigator });
-//     },
-//   };
-// };
+let mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    fetchForumDetail: (
+      authToken: string,
+      detailId: number,
+      _navigator: any,
+    ) => {
+      dispatch({
+        type: 'FORUM_DETAIL_REQUESTED',
+        authToken,
+        detailId,
+        _navigator,
+      });
+    },
+    fetchForumDetailLike: (
+      authToken: string,
+      detailId: number,
+      _navigator: any,
+    ) => {
+      dispatch({
+        type: 'FORUM_DETAIL_LIKE_REQUESTED',
+        authToken,
+        detailId,
+        _navigator,
+      });
+    },
+    fetchCommentLike: (
+      authToken: string,
+      detailId: number,
+      _navigator: any,
+    ) => {
+      dispatch({
+        type: 'COMMENT_LIKE_REQUESTED',
+        authToken,
+        detailId,
+        _navigator,
+      });
+    },
+    fetchGetComment: (authToken: string, detailId: number, _navigator: any) => {
+      dispatch({
+        type: 'GET_COMMENT_REQUESTED',
+        authToken,
+        detailId,
+        _navigator,
+      });
+    },
+    fetchPostComment: (
+      authToken: string,
+      detailId: number,
+      comment: string,
+      _navigator: any,
+    ) => {
+      dispatch({
+        type: 'POST_COMMENT_REQUESTED',
+        authToken,
+        detailId,
+        comment,
+        _navigator,
+      });
+    },
+  };
+};
 
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-// )(EventScene);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ForumDetailScene);
 
 const styles = StyleSheet.create({
   container: {
@@ -280,7 +427,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     height: 56,
   },
-  arrowBack: {
+  icon: {
     width: 24,
     height: 24,
   },
@@ -306,10 +453,10 @@ const styles = StyleSheet.create({
   },
   forumComments: {},
   inputComment: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
+    // position: 'absolute',
+    // left: 0,
+    // right: 0,
+    // bottom: 0,
     backgroundColor: WHITE,
     width: DEVICE_WIDTH,
     height: 48,
@@ -319,5 +466,11 @@ const styles = StyleSheet.create({
     borderColor: CUSTOM_WHITE,
     alignItems: 'center',
     justifyContent: 'space-around',
+  },
+  emptyComment: {
+    alignItems: 'center',
+  },
+  greyText: {
+    color: GREY,
   },
 });
