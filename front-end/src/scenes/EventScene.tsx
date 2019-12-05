@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -9,11 +9,12 @@ import { HomeObject } from '../types/Commons';
 import { token, eventID } from '../helpers';
 import { Icon, Text, Image } from '../core-ui';
 import { EventList } from '../components';
-import { CUSTOM_BLACK, WHITE } from '../constants/color';
+import { CUSTOM_BLACK, WHITE, CUSTOM_YELLOW } from '../constants/color';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
 
 type Props = NavigationScreenProps & {
   homeData: HomeObject;
+  isLoading: boolean;
   fetchHome: (authToken: string, _navigator: any) => void;
 };
 
@@ -72,9 +73,13 @@ export class EventScene extends Component<Props, EventSceneState> {
   }
 
   _renderEvents = () => {
-    let { homeData } = this.props;
+    let { homeData, isLoading } = this.props;
 
-    return homeData ? (
+    return isLoading ? (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={CUSTOM_YELLOW} />
+      </View>
+    ) : homeData ? (
       <FlatList
         onRefresh={this._onRefresh}
         refreshing={this.state.isRefresh}
@@ -120,6 +125,7 @@ let mapStateToProps = (state: RootState) => {
 
   return {
     homeData: homeState.homeData,
+    isLoading: homeState.isLoading,
   };
 };
 
@@ -170,5 +176,10 @@ const styles = StyleSheet.create({
   textContainer: {
     marginHorizontal: 16,
     marginBottom: 16,
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 18,
   },
 });

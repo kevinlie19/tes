@@ -4,11 +4,16 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  Dimensions,
+  // FlatList,
 } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+// import dateFormat from 'dateformat';
 
+import { token } from '../helpers';
+import { EventObject } from '../types/Commons';
+import { RootState } from '../types/State';
 import {
   WHITE,
   CUSTOM_BLACK,
@@ -16,27 +21,92 @@ import {
   CUSTOM_WHITE,
   CUSTOM_GREEN,
   CUSTOM_RED,
-  GREY,
 } from '../constants/color';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
 import { Icon, Text } from '../core-ui';
-import { TransactionList } from '../components';
+import { TransactionList, TabView } from '../components';
 
-type Props = NavigationScreenProps & {};
+type Props = NavigationScreenProps & {
+  ticketData: EventObject;
+  fetchGetTicket: (authToken: string, _navigator: any) => void;
+};
 
-type TransactionSceneState = {};
+type TransactionSceneState = {
+  isRefresh: boolean;
+  index: number;
+};
 
-export default class TransactionScene extends Component<
-  Props,
-  TransactionSceneState
-> {
-  state = {
+export class TransactionScene extends Component<Props, TransactionSceneState> {
+  state: TransactionSceneState = {
+    isRefresh: false,
     index: 0,
-    routes: [
-      { key: 'ongoing', title: 'ONGOING' },
-      { key: 'history', title: 'HISTORY' },
-    ],
   };
+
+  async componentDidMount() {
+    this._asyncStorage();
+  }
+
+  _asyncStorage = async () => {
+    let { fetchGetTicket } = this.props;
+    let userToken = await token.getToken();
+
+    if (userToken) {
+      await fetchGetTicket(userToken, this.props.navigation);
+    }
+  };
+
+  tab = [
+    {
+      title: 'Ongoing',
+      render: () => {
+        let { ticketData } = this.props;
+
+        return (
+          <ScrollView style={styles.body}>
+            <TransactionList
+              icon={<Icon name="membership" isActive={true} />}
+              transactionTitle="Upgrade Membership"
+              date="27 July 2019"
+              status="Waiting for payment"
+              onPress={() => {}}
+              newTextStyle={{ color: CUSTOM_RED }}
+            />
+            <TransactionList
+              icon={<Icon name="event" isActive={false} />}
+              transactionTitle="Talkshow Motivasi Kaya"
+              date="23 September 2019"
+              status="E-ticket ready"
+              onPress={() => {}}
+              newTextStyle={{ color: CUSTOM_GREEN }}
+            />
+          </ScrollView>
+        );
+      },
+    },
+    {
+      title: 'History',
+      render: () => {
+        let { ticketData } = this.props;
+
+        return (
+          <ScrollView style={styles.body}>
+            <TransactionList
+              icon={<Icon name="membership" isActive={true} />}
+              transactionTitle="Upgrade Membership"
+              date="27 July 2019"
+              onPress={() => {}}
+            />
+            <TransactionList
+              icon={<Icon name="event" isActive={false} />}
+              transactionTitle="Talkshow Motivasi Kaya"
+              date="23 September 2019"
+              onPress={() => {}}
+            />
+          </ScrollView>
+        );
+      },
+    },
+  ];
 
   render() {
     return (
@@ -53,14 +123,11 @@ export default class TransactionScene extends Component<
             <Icon name="qr" customStyle={styles.smallIcon} />
           </View>
           <TabView
-            navigationState={this.state}
-            renderTabBar={this._renderTabBar}
-            renderScene={SceneMap({
-              ongoing: this.OngoingRoute,
-              history: this.HistoryRoute,
-            })}
-            onIndexChange={(index) => this.setState({ index })}
-            initialLayout={{ width: Dimensions.get('window').width }}
+            tabs={this.tab}
+            index={this.state.index}
+            onChange={(newIndex: number) => {
+              this.setState({ index: newIndex });
+            }}
           />
         </View>
 
@@ -117,60 +184,34 @@ export default class TransactionScene extends Component<
     );
   }
 
-  _renderTabBar = (props: any) => {
-    return (
-      <TabBar
-        {...props}
-        style={{
-          backgroundColor: CUSTOM_BLACK,
-        }}
-        indicatorStyle={{
-          backgroundColor: WHITE,
-        }}
-        activeColor={WHITE}
-        inactiveColor={GREY}
-      />
-    );
+  _onRefresh = () => {
+    this.setState({ isRefresh: true });
+    this._asyncStorage().then(() => {
+      this.setState({ isRefresh: false });
+    });
   };
-
-  OngoingRoute = () => (
-    <ScrollView style={styles.body}>
-      <TransactionList
-        icon={<Icon name="membership" isActive={true} />}
-        transactionTitle="Upgrade Membership"
-        date="27 July 2019"
-        status="Waiting for payment"
-        onPress={() => {}}
-        newTextStyle={{ color: CUSTOM_RED }}
-      />
-      <TransactionList
-        icon={<Icon name="event" isActive={false} />}
-        transactionTitle="Talkshow Motivasi Kaya"
-        date="23 September 2019"
-        status="E-ticket ready"
-        onPress={() => {}}
-        newTextStyle={{ color: CUSTOM_GREEN }}
-      />
-    </ScrollView>
-  );
-
-  HistoryRoute = () => (
-    <ScrollView style={styles.body}>
-      <TransactionList
-        icon={<Icon name="membership" isActive={true} />}
-        transactionTitle="Upgrade Membership"
-        date="27 July 2019"
-        onPress={() => {}}
-      />
-      <TransactionList
-        icon={<Icon name="event" isActive={false} />}
-        transactionTitle="Talkshow Motivasi Kaya"
-        date="23 September 2019"
-        onPress={() => {}}
-      />
-    </ScrollView>
-  );
 }
+
+let mapStateToProps = (state: RootState) => {
+  let { eventDetailState } = state;
+
+  return {
+    eventDetailData: eventDetailState.eventDetailData,
+  };
+};
+
+let mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    fetchGetTicket: (authToken: string, _navigator: any) => {
+      dispatch({ type: 'FETCH_EVENT_DETAIL_REQUESTED', authToken, _navigator });
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TransactionScene);
 
 const styles = StyleSheet.create({
   container: {

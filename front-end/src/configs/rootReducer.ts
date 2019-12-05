@@ -4,6 +4,7 @@ import signinReducer from '../reducers/signinReducer';
 import signupReducer from '../reducers/signupReducer';
 import homeReducer from '../reducers/homeReducer';
 import forumReducer from '../reducers/forumReducer';
+import forumDetailReducer from '../reducers/forumDetailReducer';
 import eventDetailReducer from '../reducers/eventDetailReducer';
 import accountReducer from '../reducers/accountReducer';
 import inboxReducer from '../reducers/inboxReducer';
@@ -14,6 +15,7 @@ export default combineReducers({
   signupState: signupReducer,
   homeState: homeReducer,
   forumState: forumReducer,
+  forumDetailState: forumDetailReducer,
   eventDetailState: eventDetailReducer,
   accountState: accountReducer,
   inboxState: inboxReducer,

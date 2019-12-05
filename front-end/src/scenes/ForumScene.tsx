@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import dateFormat from 'dateformat';
 
 import { RootState } from '../types/State';
 import { AllForumObject } from '../types/Commons';
 import { token } from '../helpers';
-import { CUSTOM_BLACK, WHITE } from '../constants/color';
+import { CUSTOM_BLACK, WHITE, CUSTOM_YELLOW } from '../constants/color';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
 import { Icon, Text } from '../core-ui';
 import { ForumList, TabView } from '../components';
 
 type Props = NavigationScreenProps & {
   forumData: AllForumObject;
+  isLoading: boolean;
   fetchForum: (authToken: string) => void;
 };
 
@@ -58,7 +60,11 @@ export class ForumScene extends Component<Props, ForumSceneState> {
             <View style={styles.textContainer}>
               <Text text="Terbaru" type="medium" />
             </View>
-            {this.props.forumData ? (
+            {this.props.isLoading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color={CUSTOM_YELLOW} />
+              </View>
+            ) : this.props.forumData ? (
               <FlatList
                 onRefresh={this._onRefresh}
                 refreshing={this.state.isRefresh}
@@ -67,15 +73,23 @@ export class ForumScene extends Component<Props, ForumSceneState> {
                   return (
                     <ForumList
                       thumbnail={item.image}
-                      type={item.category}
-                      date="26 Juli 2019"
+                      type="All"
+                      category={item.category}
+                      date={dateFormat(item.cdate, 'dd mmmm yyyy')}
                       forumTitle={item.forum_name}
-                      starter="Lia Eden"
-                      comments={1296}
+                      starter={item.full_name}
+                      comments={item.comment_length}
+                      onPress={() =>
+                        this.props.navigation.navigate('ForumDetail', {
+                          id: item.id,
+                        })
+                      }
                     />
                   );
                 }}
-                keyExtractor={(index) => index.toString()}
+                keyExtractor={(index) =>
+                  index.toString() + Math.random().toString()
+                }
               />
             ) : (
               <View />
@@ -92,7 +106,11 @@ export class ForumScene extends Component<Props, ForumSceneState> {
             <View style={styles.textContainer}>
               <Text text="Terbaru" type="medium" />
             </View>
-            {this.props.forumData ? (
+            {this.props.isLoading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color={CUSTOM_YELLOW} />
+              </View>
+            ) : this.props.forumData ? (
               <FlatList
                 onRefresh={this._onRefresh}
                 refreshing={this.state.isRefresh}
@@ -101,15 +119,23 @@ export class ForumScene extends Component<Props, ForumSceneState> {
                   return (
                     <ForumList
                       thumbnail={item.image}
-                      type={item.category}
-                      date="26 Juli 2019"
+                      type="All"
+                      category={item.category}
+                      date={dateFormat(item.cdate, 'dd mmmm yyyy')}
                       forumTitle={item.forum_name}
-                      starter="Lia Eden"
-                      comments={1296}
+                      starter={item.full_name}
+                      comments={item.comment_length}
+                      onPress={() =>
+                        this.props.navigation.navigate('ForumDetail', {
+                          id: item.id,
+                        })
+                      }
                     />
                   );
                 }}
-                keyExtractor={(index) => index.toString()}
+                keyExtractor={(index) =>
+                  index.toString() + Math.random().toString()
+                }
               />
             ) : (
               <View />
@@ -126,7 +152,11 @@ export class ForumScene extends Component<Props, ForumSceneState> {
             <View style={styles.textContainer}>
               <Text text="Terbaru" type="medium" />
             </View>
-            {this.props.forumData ? (
+            {this.props.isLoading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color={CUSTOM_YELLOW} />
+              </View>
+            ) : this.props.forumData ? (
               <FlatList
                 onRefresh={this._onRefresh}
                 refreshing={this.state.isRefresh}
@@ -135,15 +165,23 @@ export class ForumScene extends Component<Props, ForumSceneState> {
                   return (
                     <ForumList
                       thumbnail={item.image}
-                      type={item.category}
-                      date="26 Juli 2019"
+                      type="All"
+                      category={item.category}
+                      date={dateFormat(item.cdate, 'dd mmmm yyyy')}
                       forumTitle={item.forum_name}
-                      starter="Lia Eden"
-                      comments={1296}
+                      starter={item.full_name}
+                      comments={item.comment_length}
+                      onPress={() =>
+                        this.props.navigation.navigate('ForumDetail', {
+                          id: item.id,
+                        })
+                      }
                     />
                   );
                 }}
-                keyExtractor={(index) => index.toString()}
+                keyExtractor={(index) =>
+                  index.toString() + Math.random().toString()
+                }
               />
             ) : (
               <View />
@@ -177,7 +215,11 @@ export class ForumScene extends Component<Props, ForumSceneState> {
             tabs={this.tab}
             index={this.state.index}
             onChange={(newIndex: number) => {
-              this.setState({ index: newIndex });
+              if (this.props.navigation.getParam('membership') === 'Basic') {
+                this.setState({ index: 0 });
+              } else {
+                this.setState({ index: newIndex });
+              }
             }}
           />
         </View>
@@ -198,6 +240,7 @@ let mapStateToProps = (state: RootState) => {
 
   return {
     forumData: forumState.forumData,
+    isLoading: forumState.isLoading,
   };
 };
 
@@ -258,5 +301,10 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginHorizontal: 16,
     marginBottom: 16,
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 18,
   },
 });

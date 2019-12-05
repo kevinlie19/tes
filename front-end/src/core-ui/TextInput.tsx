@@ -5,6 +5,7 @@ import { Input, InputProps } from 'react-native-elements';
 
 type Props = InputProps & {
   newContainerStyle?: StyleProp<ViewStyle>;
+  newInputContainerStyle?: StyleProp<ViewStyle>;
   placeholder: string;
   value?: string;
   onChangeText?: (text: string) => void;
@@ -13,6 +14,7 @@ type Props = InputProps & {
 export default function TextInput(props: Props) {
   let {
     newContainerStyle,
+    newInputContainerStyle,
     placeholder,
     value,
     onChangeText,
@@ -22,6 +24,7 @@ export default function TextInput(props: Props) {
   return (
     <Input
       containerStyle={newContainerStyle}
+      inputContainerStyle={newInputContainerStyle}
       placeholder={placeholder}
       value={value}
       onChangeText={onChangeText}

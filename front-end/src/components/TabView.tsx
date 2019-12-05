@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import { TabView as TabViewNative, TabBar } from 'react-native-tab-view';
 
-import { WHITE, MIDDLE_BLACK, GREY } from '../constants/color';
+import { WHITE, GREY, CUSTOM_BLACK } from '../constants/color';
 
 type Tab = {
   title: string;
@@ -59,6 +59,6 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
   },
   container: {
-    backgroundColor: MIDDLE_BLACK,
+    backgroundColor: CUSTOM_BLACK,
   },
 });

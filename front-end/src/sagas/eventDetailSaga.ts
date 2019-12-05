@@ -8,6 +8,7 @@ import { eventID } from '../helpers';
 export default function* eventDetailSagaWatcher(): any {
   yield takeLatest('FETCH_EVENT_DETAIL_REQUESTED', fetchEventDetail);
   yield takeLatest('FETCH_TICKET_REQUESTED', fetchTicket);
+  yield takeLatest('FETCH_GET_TICKET_REQUESTED', fetchGetTicket);
 }
 
 function* fetchEventDetail(action: EventDetailAction) {
@@ -22,7 +23,9 @@ function* fetchEventDetail(action: EventDetailAction) {
         authorization: authToken.slice(1, -1),
       },
     });
+
     let result = yield response.json();
+
     if (result.success) {
       let data = result.data;
       yield put({
@@ -71,6 +74,35 @@ function* fetchTicket(action: EventDetailAction) {
       yield put({
         type: 'FETCH_TICKET_FAILED',
         ticketData: {},
+      });
+      NavigationHelper.navigate('Home');
+    }
+  }
+}
+
+function* fetchGetTicket(action: EventDetailAction) {
+  if (action.type === 'FETCH_GET_TICKET_REQUESTED') {
+    let { authToken, _navigator } = action;
+    let url = `${API_HOST}/api/feature/get-ticket`;
+    let response = yield call(fetch, url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: authToken.slice(1, -1),
+      },
+    });
+    let result = yield response.json();
+    if (result.success) {
+      let data = result.data;
+      yield put({
+        type: 'FETCH_GET_TICKET_SUCCEED',
+        ticketData: data,
+      });
+    } else {
+      let NavigationHelper = createNavigationHelper(_navigator);
+      yield put({
+        type: 'FETCH_GET_TICKET_FAILED',
+        ticketData: [],
       });
       NavigationHelper.navigate('Home');
     }

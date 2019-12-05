@@ -6,18 +6,30 @@ import { LIGHT_GREY, CUSTOM_WHITE, DARK_GREY, GREY } from '../constants/color';
 
 type Props = {
   thumbnail?: string | null;
-  type: 'Umum' | 'Jual' | 'Beli';
-  date: string;
+  type: 'All' | 'Latest';
+  category: 'Umum' | 'Jual' | 'Beli';
+  date?: string;
   forumTitle: string;
   starter: string;
-  comments: number;
+  comments?: number;
+  latestComment?: string;
   onPress?: () => void;
 };
 
 export default function ForumList(props: Props) {
-  let { thumbnail, type, date, forumTitle, starter, comments, onPress } = props;
+  let {
+    thumbnail,
+    type,
+    category,
+    date,
+    forumTitle,
+    starter,
+    comments,
+    latestComment,
+    onPress,
+  } = props;
 
-  return (
+  return type === 'All' ? (
     <TouchableOpacity onPress={onPress} style={styles.forumListContainer}>
       {thumbnail && thumbnail !== null ? (
         <Image
@@ -27,7 +39,7 @@ export default function ForumList(props: Props) {
         />
       ) : (
         <View style={styles.iconContainer}>
-          {type === 'Umum' ? (
+          {category === 'Umum' ? (
             <Icon name="forum" isActive={true} customStyle={styles.forumIcon} />
           ) : (
             <Icon name="cart" isActive={true} customStyle={styles.forumIcon} />
@@ -36,11 +48,17 @@ export default function ForumList(props: Props) {
       )}
 
       <View style={styles.infoContainer}>
-        <Text text={date} type="xsmall" newTextStyle={styles.lightGreyText} />
+        <Text
+          text={date ? date : ''}
+          type="xsmall"
+          newTextStyle={styles.lightGreyText}
+        />
         <Text
           text={forumTitle}
           type="medium"
           newTextStyle={styles.titleForum}
+          ellipsizeMode="tail"
+          numberOfLines={1}
         />
         <Text
           text={'Starter: ' + starter}
@@ -49,6 +67,53 @@ export default function ForumList(props: Props) {
         />
         <Text
           text={'Comment: ' + comments}
+          type="xsmall"
+          newTextStyle={styles.lightGreyText}
+        />
+      </View>
+    </TouchableOpacity>
+  ) : (
+    <TouchableOpacity
+      onPress={onPress}
+      style={[
+        styles.forumListContainer,
+        { borderBottomWidth: 0, paddingHorizontal: 0, marginBottom: 0 },
+      ]}
+    >
+      {thumbnail && thumbnail !== null ? (
+        <Image
+          src={thumbnail}
+          type="square"
+          newImageStyle={[
+            styles.imageContainer,
+            { alignSelf: 'flex-start', marginTop: 5 },
+          ]}
+        />
+      ) : (
+        <View style={styles.iconContainer}>
+          {category === 'Umum' ? (
+            <Icon name="forum" isActive={true} customStyle={styles.forumIcon} />
+          ) : (
+            <Icon name="cart" isActive={true} customStyle={styles.forumIcon} />
+          )}
+        </View>
+      )}
+
+      <View style={styles.infoContainer}>
+        <Text
+          text={forumTitle}
+          type="medium"
+          newTextStyle={styles.titleForum}
+          ellipsizeMode="tail"
+          numberOfLines={1}
+        />
+        <Text
+          text={'Starter: ' + starter}
+          type="small"
+          newTextStyle={styles.starterForum}
+        />
+        <Text
+          text={'Latest Comment: ' + latestComment}
           type="xsmall"
           newTextStyle={styles.lightGreyText}
         />
@@ -77,7 +142,6 @@ const styles = StyleSheet.create({
     height: 54,
     alignItems: 'center',
     alignSelf: 'center',
-    // justifyContent: 'center',
     marginRight: 16,
   },
   forumIcon: {
@@ -94,6 +158,7 @@ const styles = StyleSheet.create({
     color: DARK_GREY,
     marginTop: 4,
     marginBottom: 6,
+    maxWidth: 270,
   },
   starterForum: {
     color: GREY,

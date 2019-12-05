@@ -14,8 +14,8 @@ function* signupRequest(action: SignUpAction) {
     let url = `${API_HOST}/api/auth/sign-up`;
     let data = {
       email,
-      password,
       full_name,
+      password,
     };
     let response = yield call(fetch, url, {
       method: 'POST',
@@ -24,6 +24,7 @@ function* signupRequest(action: SignUpAction) {
       },
       body: JSON.stringify(data),
     });
+
     let result = yield response.json();
 
     if (result.success) {

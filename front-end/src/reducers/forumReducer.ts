@@ -6,6 +6,7 @@ const initialState: ForumState = {
     jual: [],
     beli: [],
   },
+  isLoading: false,
 };
 
 export default function forumReducer(
@@ -13,15 +14,23 @@ export default function forumReducer(
   action: ForumAction,
 ) {
   switch (action.type) {
+    case 'FORUM_REQUESTED': {
+      return {
+        ...forumSceneState,
+        isLoading: true,
+      };
+    }
     case 'FORUM_SUCCEED': {
       return {
         ...forumSceneState,
         forumData: action.forumData,
+        isLoading: false,
       };
     }
     case 'FORUM_FAILED': {
       return {
         ...forumSceneState,
+        isLoading: false,
       };
     }
     default: {

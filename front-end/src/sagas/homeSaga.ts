@@ -19,7 +19,6 @@ function* fetchHome(action: HomeAction) {
       },
     });
     let result = yield response.json();
-
     if (result.success) {
       let data = result.data;
       yield put({

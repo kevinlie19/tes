@@ -36,16 +36,36 @@ export type TicketObject = {
   total: number;
 };
 
-type ForumObject = {
+export type CommentObject = {
+  id: number;
+  id_user: string;
+  email: string;
+  user_role: 'User' | 'Admin';
+  full_name: string;
+  avatar: string | null;
+  membership: 'Basic' | 'Premium';
+  gender: 'Male' | 'Female' | 'Other';
+  comment: string;
+  likes: number;
+  is_liked_by: Array<{ id: string }>;
+  is_liked_by_you: boolean;
+  date: string;
+};
+
+export type ForumObject = {
   id: string;
   id_user: string;
+  full_name: string;
   forum_name: string;
   category: 'Umum' | 'Jual' | 'Beli';
   description: string;
   image: string | null;
   likes: number;
+  is_liked_by_you: boolean;
   cdate: string;
   udate: string;
+  latest_comment: string;
+  comment_length: number;
 };
 
 export type AllForumObject = {
@@ -65,4 +85,5 @@ export type InboxObject = [
 export type HomeObject = {
   user: UserObject;
   events: Array<EventObject>;
+  forums: Array<ForumObject>;
 };
