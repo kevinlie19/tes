@@ -18,6 +18,7 @@ function* fetchForumDetail(action: ForumDetailAction) {
     let response = yield call(fetch, url, {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         authorization: authToken.slice(1, -1),
       },
     });
@@ -29,6 +30,7 @@ function* fetchForumDetail(action: ForumDetailAction) {
         forumDetailData: data,
       });
     } else {
+      console.log('asd');
       yield put({
         type: 'FORUM_DETAIL_FAILED',
         forumDetailData: {},
@@ -44,6 +46,7 @@ function* fetchGetComment(action: ForumDetailAction) {
     let response = yield call(fetch, url, {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         authorization: authToken.slice(1, -1),
       },
     });
@@ -93,6 +96,7 @@ function* fetchForumDetailLike(action: ForumDetailAction) {
     let response = yield call(fetch, url, {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         authorization: authToken.slice(1, -1),
       },
     });
@@ -109,6 +113,7 @@ function* fetchCommentLike(action: ForumDetailAction) {
     let response = yield call(fetch, url, {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         authorization: authToken.slice(1, -1),
       },
     });

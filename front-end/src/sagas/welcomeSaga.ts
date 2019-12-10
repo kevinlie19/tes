@@ -19,13 +19,18 @@ function* signinGoogleRequest(action: WelcomeAction) {
       avatar,
       _navigator,
     } = action;
+    let full_name = '';
     let url = `${API_HOST}/api/auth/sign-up`;
+    if (last_name === 'undefined' || last_name === undefined) {
+      full_name = first_name + '';
+    } else {
+      full_name = first_name + ' ' + last_name;
+    }
     let data = {
       id,
       email,
       password,
-      first_name,
-      last_name,
+      full_name,
       avatar,
     };
     let response = yield call(fetch, url, {

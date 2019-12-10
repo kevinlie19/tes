@@ -100,11 +100,17 @@ export class MyAccountScene extends Component<Props, MyAccountSceneState> {
               text="Terms of Service"
               type="medium"
               newTextStyle={styles.otherText}
+              onPress={() => {
+                this.props.navigation.navigate('TermsOfService');
+              }}
             />
             <Text
               text="Privacy Policy"
               type="medium"
               newTextStyle={styles.otherText}
+              onPress={() => {
+                this.props.navigation.navigate('PrivacyPolicy');
+              }}
             />
             <Text
               text="Log Out"

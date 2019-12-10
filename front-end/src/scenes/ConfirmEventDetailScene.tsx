@@ -11,7 +11,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import dateFormat from 'dateformat';
 
-import { token } from '../helpers';
+import { token, numberFormat } from '../helpers';
 import { EventObject, TicketObject } from '../types/Commons';
 import { RootState } from '../types/State';
 import {
@@ -87,9 +87,7 @@ export class ConfirmEventDetailScene extends Component<
           </View>
 
           <Text
-            text={
-              'Rp ' + Intl.NumberFormat('id-ID').format(eventDetailData.price)
-            }
+            text={'Rp ' + numberFormat(eventDetailData.price.toString())}
             type="mlarge"
             newTextStyle={styles.textPrice}
           />

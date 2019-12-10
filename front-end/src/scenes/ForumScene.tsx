@@ -8,7 +8,7 @@ import dateFormat from 'dateformat';
 import { RootState } from '../types/State';
 import { AllForumObject } from '../types/Commons';
 import { token } from '../helpers';
-import { CUSTOM_BLACK, WHITE, CUSTOM_YELLOW } from '../constants/color';
+import { CUSTOM_BLACK, WHITE, CUSTOM_YELLOW, GREY } from '../constants/color';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
 import { Icon, Text } from '../core-ui';
 import { ForumList, TabView } from '../components';
@@ -64,7 +64,7 @@ export class ForumScene extends Component<Props, ForumSceneState> {
               <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color={CUSTOM_YELLOW} />
               </View>
-            ) : this.props.forumData ? (
+            ) : this.props.forumData.umum.length > 0 ? (
               <FlatList
                 onRefresh={this._onRefresh}
                 refreshing={this.state.isRefresh}
@@ -92,7 +92,13 @@ export class ForumScene extends Component<Props, ForumSceneState> {
                 }
               />
             ) : (
-              <View />
+              <View style={styles.emptyContainer}>
+                <Text
+                  style={styles.emptyText}
+                  type="medium"
+                  text="Sorry, No Available Forums Yet"
+                />
+              </View>
             )}
           </View>
         );
@@ -110,7 +116,7 @@ export class ForumScene extends Component<Props, ForumSceneState> {
               <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color={CUSTOM_YELLOW} />
               </View>
-            ) : this.props.forumData ? (
+            ) : this.props.forumData.jual.length > 0 ? (
               <FlatList
                 onRefresh={this._onRefresh}
                 refreshing={this.state.isRefresh}
@@ -138,7 +144,13 @@ export class ForumScene extends Component<Props, ForumSceneState> {
                 }
               />
             ) : (
-              <View />
+              <View style={styles.emptyContainer}>
+                <Text
+                  style={styles.emptyText}
+                  type="medium"
+                  text="Sorry, No Available Forums Yet"
+                />
+              </View>
             )}
           </View>
         );
@@ -156,7 +168,7 @@ export class ForumScene extends Component<Props, ForumSceneState> {
               <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color={CUSTOM_YELLOW} />
               </View>
-            ) : this.props.forumData ? (
+            ) : this.props.forumData.beli.length > 0 ? (
               <FlatList
                 onRefresh={this._onRefresh}
                 refreshing={this.state.isRefresh}
@@ -184,7 +196,13 @@ export class ForumScene extends Component<Props, ForumSceneState> {
                 }
               />
             ) : (
-              <View />
+              <View style={styles.emptyContainer}>
+                <Text
+                  style={styles.emptyText}
+                  type="medium"
+                  text="Sorry, No Available Forums Yet"
+                />
+              </View>
             )}
           </View>
         );
@@ -306,5 +324,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 18,
+  },
+  emptyContainer: {
+    marginTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    color: GREY,
   },
 });

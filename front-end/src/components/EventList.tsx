@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { Text, Image } from '../core-ui';
 import { CUSTOM_YELLOW } from '../constants/color';
+import { numberFormat } from '../helpers';
 
 type Props = {
   src?: string | null;
@@ -42,7 +43,7 @@ export default function EventList(props: Props) {
           newTextStyle={styles.dateEventHorizontal}
         />
         <Text
-          text={'Rp ' + Intl.NumberFormat('id-ID').format(price)}
+          text={'Rp ' + numberFormat(price.toString())}
           type="xsmall"
           newTextStyle={styles.priceEventHorizontal}
         />
@@ -72,7 +73,7 @@ export default function EventList(props: Props) {
             newTextStyle={styles.dateEventVertical}
           />
           <Text
-            text={'Rp ' + Intl.NumberFormat('id-ID').format(price)}
+            text={'Rp ' + numberFormat(price.toString())}
             type="xsmall"
             newTextStyle={styles.priceEventVertical}
           />

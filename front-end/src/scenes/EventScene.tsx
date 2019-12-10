@@ -9,7 +9,7 @@ import { HomeObject } from '../types/Commons';
 import { token, eventID } from '../helpers';
 import { Icon, Text, Image } from '../core-ui';
 import { EventList } from '../components';
-import { CUSTOM_BLACK, WHITE, CUSTOM_YELLOW } from '../constants/color';
+import { CUSTOM_BLACK, WHITE, CUSTOM_YELLOW, GREY } from '../constants/color';
 import { STATUS_BAR_HEIGHT } from '../constants/deviceConfig';
 
 type Props = NavigationScreenProps & {
@@ -56,7 +56,6 @@ export class EventScene extends Component<Props, EventSceneState> {
               type="headerTitle"
               newTextStyle={styles.titleText}
             />
-            <View />
           </View>
         </View>
         <View style={styles.body}>
@@ -79,8 +78,9 @@ export class EventScene extends Component<Props, EventSceneState> {
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={CUSTOM_YELLOW} />
       </View>
-    ) : homeData ? (
+    ) : homeData.events.length > 0 ? (
       <FlatList
+        indicatorStyle="white"
         onRefresh={this._onRefresh}
         refreshing={this.state.isRefresh}
         data={homeData.events}
@@ -103,7 +103,13 @@ export class EventScene extends Component<Props, EventSceneState> {
         keyExtractor={(item) => item.id.toString()}
       />
     ) : (
-      <View />
+      <View style={styles.emptyContainer}>
+        <Text
+          style={styles.emptyText}
+          type="medium"
+          text="Sorry, No Available Events Yet"
+        />
+      </View>
     );
   };
 
@@ -181,5 +187,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 18,
+  },
+  emptyContainer: {
+    marginTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    color: GREY,
   },
 });

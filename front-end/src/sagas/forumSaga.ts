@@ -14,6 +14,7 @@ function* fetchForum(action: ForumAction) {
     let response = yield call(fetch, url, {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         authorization: authToken.slice(1, -1),
       },
     });

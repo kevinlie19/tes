@@ -227,7 +227,10 @@ export class ForumDetailScene extends Component<Props, ForumDetailSceneState> {
               />
               <TextInput
                 placeholder="Add a Comment"
-                newInputContainerStyle={{ borderBottomWidth: 0 }}
+                newInputContainerStyle={{
+                  borderBottomWidth: 0,
+                  paddingRight: 20,
+                }}
                 onChangeText={this._onChangeComment}
                 value={comment}
               />
@@ -300,8 +303,6 @@ export class ForumDetailScene extends Component<Props, ForumDetailSceneState> {
           ? likesCountForum + 1
           : likesCountForum - 1,
       });
-
-      await this._asyncStorage();
     }
   };
 

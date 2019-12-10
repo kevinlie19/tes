@@ -14,6 +14,8 @@ import MyTicketScene from '../../scenes/MyTicketScene';
 import TransactionScene from '../../scenes/TransactionScene';
 import InboxScene from '../../scenes/InboxScene';
 import MyAccountScene from '../../scenes/MyAccountScene';
+import TermsOfServiceScene from '../../scenes/TermsOfServiceScene';
+import PrivacyPolicyScene from '../../scenes/PrivacyPolicyScene';
 import PaymentScene from '../../scenes/PaymentScene';
 
 const AppStack = createStackNavigator({
@@ -71,6 +73,14 @@ const AppStack = createStackNavigator({
   },
   MyAccount: {
     screen: MyAccountScene,
+    navigationOptions: { header: null },
+  },
+  TermsOfService: {
+    screen: TermsOfServiceScene,
+    navigationOptions: { header: null },
+  },
+  PrivacyPolicy: {
+    screen: PrivacyPolicyScene,
     navigationOptions: { header: null },
   },
   Payment: {

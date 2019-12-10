@@ -279,8 +279,9 @@ export class HomeScene extends Component<Props, HomeSceneState> {
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="small" color={CUSTOM_YELLOW} />
       </View>
-    ) : homeData ? (
+    ) : homeData.events.length > 0 ? (
       <FlatList
+        indicatorStyle="white"
         style={styles.events}
         horizontal={true}
         data={homeData.events.slice(0, 3)}
@@ -301,8 +302,12 @@ export class HomeScene extends Component<Props, HomeSceneState> {
         keyExtractor={(item) => item.id.toString()}
       />
     ) : (
-      <View>
-        <Text type="medium" text="Sorry, No Available Events Yet" />
+      <View style={styles.emptyContainer}>
+        <Text
+          style={styles.emptyText}
+          type="medium"
+          text="Sorry, No Available Events Yet"
+        />
       </View>
     );
   };
@@ -314,7 +319,7 @@ export class HomeScene extends Component<Props, HomeSceneState> {
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="small" color={CUSTOM_YELLOW} />
       </View>
-    ) : homeData ? (
+    ) : homeData.forums.length > 0 ? (
       <FlatList
         style={styles.events}
         data={homeData.forums}
@@ -340,8 +345,12 @@ export class HomeScene extends Component<Props, HomeSceneState> {
         keyExtractor={(item) => Math.random().toString()}
       />
     ) : (
-      <View>
-        <Text type="medium" text="Sorry, No Available Forums Yet" />
+      <View style={styles.emptyContainer}>
+        <Text
+          style={styles.emptyText}
+          type="medium"
+          text="Sorry, No Available Forums Yet"
+        />
       </View>
     );
   };
@@ -517,5 +526,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 18,
+  },
+  emptyContainer: {
+    marginTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    color: GREY,
   },
 });

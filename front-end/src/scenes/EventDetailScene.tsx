@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { NavigationScreenProps, FlatList, ScrollView } from 'react-navigation';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+} from 'react-native';
+import { NavigationScreenProps } from 'react-navigation';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import dateFormat from 'dateformat';
 
-import { token } from '../helpers';
+import { token, numberFormat } from '../helpers';
 import { EventObject } from '../types/Commons';
 import { RootState } from '../types/State';
 import {
@@ -90,9 +96,7 @@ export class EventDetailScene extends Component<Props, EventDetailSceneState> {
           </View>
 
           <Text
-            text={
-              'Rp ' + Intl.NumberFormat('id-ID').format(eventDetailData.price)
-            }
+            text={'Rp ' + numberFormat(eventDetailData.price.toString())}
             type="mlarge"
             newTextStyle={styles.textPrice}
           />

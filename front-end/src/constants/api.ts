@@ -1,1 +1,1 @@
-export const API_HOST = 'https://tes-tematik-umn.herokuapp.com';
+export const API_HOST = 'https://tes-uas.herokuapp.com';
