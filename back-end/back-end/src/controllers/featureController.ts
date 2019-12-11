@@ -404,7 +404,7 @@ async function getForum(req: Request, res: Response) {
     let { id: id_user } = decoded;
 
     let result = await forumModel.getForumById(id);
-    let userResult = await userModel.getUserData(decoded);
+    let userResult = await userModel.getUserData(undefined, result.data.id_user);
     let likes: Array<{ id: number }> = [];
     let is_liked_by_you: boolean = false;
 

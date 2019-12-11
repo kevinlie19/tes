@@ -62,7 +62,8 @@ async function home(req: Request, res: Response) {
         );
         commentResult.data.sort((a, b) => b.date - a.date);
         item.full_name = userResult.data.full_name;
-        item.latest_comment = commentResult.data[0].comment;
+        item.latest_comment =
+          commentResult.data.length !== 0 ? commentResult.data[0].comment : '';
         return item;
       };
       const getUmumData = async () => {
